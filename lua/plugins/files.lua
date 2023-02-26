@@ -24,8 +24,8 @@ return {
         { enabled = false }, -- hint
       },
     },
-      config = function(_, opts)
-        require('bufferline').setup(opts)
+    config = function(_, opts)
+      require('bufferline').setup(opts)
 
       local keymap_opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '<A-p>', '<Cmd>BufferPrevious<cr>', keymap_opts)

@@ -29,15 +29,17 @@ return {
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
       local on_attach = function(_, bufnr)
-        local nmap = function(keys, func, desc)
+        local map = function(modes, keys, func, desc)
           if desc then
             desc = 'LSP: ' .. desc
           end
 
-          vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+          vim.keymap.set(modes, keys, func, { buffer = bufnr, desc = desc })
         end
 
-        nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+        -- TODO: add more LSP mappings
+        map('n', 'gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+        map({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, 'Signature help')
 
         vim.api.nvim_buf_create_user_command(
           bufnr,

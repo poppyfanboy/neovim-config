@@ -21,6 +21,7 @@ the leader key is space
 ### LSP
 
 - `gd` &mdash; go to definition
+- `<c-k>` &mdash; trigger signature help
 
 ### snippets
 
@@ -30,6 +31,7 @@ the leader key is space
 ### misc
 
 - `<leader>cd` &mdash; cd into the directory of the opened file
+- `<c-l>` &mdash; switch between russian and english layouts
 
 ### neovide specific
 

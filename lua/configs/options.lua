@@ -27,7 +27,6 @@ vim.o.timeout = true
 vim.o.timeoutlen = 300
 vim.o.updatetime = 250
 
-vim.o.list = true
-vim.o.listchars = 'eol:󱞦,trail:_,space:·'
+vim.o.formatoptions = 'jcrqlnto'
 
 vim.g.python3_host_prog = 'python'
