@@ -1,0 +1,28 @@
+{
+  "Mathjax fraction": {
+    "prefix": "//",
+    "body": ["\\frac{${1}}{${2}}"]
+  },
+  "Mathjax begin-end block": {
+    "prefix": "beg",
+    "body": [
+      "\\begin{${1}}",
+      "${2}",
+      "\\end{${1}}",
+      "${0}"
+    ]
+  },
+  "Inline Mathjax block": {
+    "prefix": "$",
+    "body": ["\\$${1}\\$"]
+  },
+  "Mathjax block": {
+    "prefix": "$$",
+    "body": [
+      "\\$\\$",
+      "${1}",
+      "\\$\\$",
+      "${0}"
+    ]
+  }
+}

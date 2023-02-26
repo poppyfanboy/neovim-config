@@ -1,0 +1,10 @@
+{
+  "Em-dash HTML entity": {
+    "prefix": "md",
+    "body": ["&mdash;"]
+  },
+  "Minus HTML entity": {
+    "prefix": "min",
+    "body": ["&minus;"]
+  }
+}
