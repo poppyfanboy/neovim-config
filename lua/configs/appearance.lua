@@ -12,7 +12,12 @@ vim.o.wrap = false
 vim.o.pumheight = 10
 
 vim.o.list = true
-vim.o.listchars = 'eol:󱞦,trail:_,space:·'
+vim.opt.listchars:append('eol:󱞦')
+vim.opt.listchars:append('trail:_')
+vim.opt.listchars:append('space:·')
+vim.opt.listchars:append('tab:-->')
+
+vim.o.termguicolors = true
 
 if vim.g.neovide then
   vim.g.neovide_hide_mouse_when_typing = true

@@ -1,11 +1,7 @@
 return {
   {
-    'ellisonleao/glow.nvim',
-    config = true,
-  },
-  {
     'iamcco/markdown-preview.nvim',
-    config = function()
+    build = function()
       vim.fn['mkdp#util#install']()
     end
   },
@@ -38,6 +34,12 @@ return {
         '<leader>t2',
         [[<C-\><C-n>:ToggleTerm 2<cr>]],
         { desc = 'Open second terminal', silent = true }
+      )
+      vim.keymap.set(
+        { 'n' },
+        '<leader>tf',
+        [[<C-\><C-n>:ToggleTerm 3 direction=float<cr>]],
+        { desc = 'Open floating terminal', silent = true }
       )
 
       require('toggleterm').setup()

@@ -30,16 +30,15 @@ return {
       local keymap_opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '<A-p>', '<Cmd>BufferPrevious<cr>', keymap_opts)
       vim.api.nvim_set_keymap('n', '<A-n>', '<Cmd>BufferNext<cr>', keymap_opts)
-    end
+    end,
   },
   {
     'nvim-tree/nvim-tree.lua',
     tag = 'nightly',
     opts = {
-      update_focused_file = {
-        enable = true,
-        update_root = true,
-        ignore_list = { 'gitcommit' },
+      sync_root_with_cwd = true,
+      renderer = {
+        root_folder_label = ':t',
       },
     },
     config = function(_, opts)
@@ -77,5 +76,31 @@ return {
         bufferline_api.set_offset(0)
       end)
     end
+  },
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    tag = '0.1.1',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      extensions = {
+        fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = 'smart_case',
+        },
+      },
+    },
+    config = function(_, opts)
+      local telescope = require 'telescope';
+      telescope.setup(opts)
+      telescope.load_extension('fzf')
+
+      vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
+    end,
   },
 }

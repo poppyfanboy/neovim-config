@@ -1,6 +1,6 @@
 ## keymaps
 
-the leader key is space
+the leader key is the space key
 
 ### buffers
 

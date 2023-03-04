@@ -1,5 +1,5 @@
-if vim.fn.has('win32') then
-  vim.o.shell = vim.fn.executable('pwsh') and 'pwsh' or 'powershell'
+if vim.fn.has('win32') and vim.fn.executable('pwsh') then
+  vim.o.shell = 'pwsh'
   vim.o.shellcmdflag = table.concat({
     '-NoLogo',
     '-NoProfile',
