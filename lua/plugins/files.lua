@@ -94,6 +94,13 @@ return {
           case_mode = 'smart_case',
         },
       },
+      defaults = {
+        mappings = {
+          i = {
+            ['<c-l>'] = { '<c-^>', type = 'command' },
+          },
+        },
+      },
     },
     config = function(_, opts)
       local telescope = require 'telescope';
@@ -101,6 +108,9 @@ return {
       telescope.load_extension('fzf')
 
       vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
+      vim.keymap.set('n', '<leader>fhf', '<cmd>Telescope find_files hidden=true<cr>')
+      vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
+      vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
     end,
   },
 }

@@ -14,7 +14,7 @@ vim.o.langmap = table.concat({
 }, ',')
 vim.o.iminsert = 0
 vim.o.imsearch = -1
-vim.keymap.set({ 'i' }, '<c-l>', '<c-^>', {})
+vim.keymap.set({ 'i', 'c' }, '<c-l>', '<c-^>', {})
 vim.keymap.set({ 'n' }, '<c-l>', 'i<c-^><esc>', {})
 
 if vim.g.neovide then
@@ -34,3 +34,6 @@ vim.api.nvim_set_keymap(
 )
 
 vim.keymap.set({ 'c' }, '<c-space>', '<c-y>', { silent = true })
+
+vim.keymap.set({ 'n' }, ']q', '<cmd>cnext<cr>', { silent = true })
+vim.keymap.set({ 'n' }, '[q', '<cmd>cprev<cr>', { silent = true })

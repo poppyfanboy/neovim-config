@@ -1,4 +1,4 @@
-if vim.fn.has('win32') and vim.fn.executable('pwsh') then
+if vim.fn.has('win32') == 1 and vim.fn.executable('pwsh') == 1 then
   vim.o.shell = 'pwsh'
   vim.o.shellcmdflag = table.concat({
     '-NoLogo',

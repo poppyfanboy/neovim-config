@@ -4,35 +4,6 @@ return {
     dependencies = {
       'rafamadriz/friendly-snippets',
     },
-    opts = {
-      history = true,
-      region_check_events = 'CursorMoved',
-    },
-    keys = {
-      {
-        '<tab>',
-        function()
-          return require('luasnip').jumpable(1) and '<Plug>luasnip-jump-next' or '<tab>'
-        end,
-        expr = true, silent = true, mode = "i",
-      },
-      {
-        '<tab>',
-        function() require('luasnip').jump(1) end,
-        mode = 's',
-      },
-      {
-        '<s-tab>',
-        function() require('luasnip').jump( -1) end,
-        mode = { 'i', 's' },
-      },
-    },
-    config = function()
-      require('luasnip.loaders.from_vscode').lazy_load()
-      require('luasnip.loaders.from_vscode').lazy_load({
-        paths = { vim.fn.stdpath 'config' .. '/snippets' }
-      })
-    end,
   },
   {
     'hrsh7th/nvim-cmp',
@@ -48,6 +19,29 @@ return {
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       local lspkind = require 'lspkind'
+      local types = require 'luasnip.util.types'
+
+      luasnip.config.setup({
+        history = true,
+        region_check_events = 'CursorMoved',
+        ext_opts = {
+          [types.choiceNode] = {
+            active = {
+              virt_text = {{'●', 'GruvboxOrange'}},
+            },
+          },
+          [types.insertNode] = {
+            active = {
+              virt_text = {{'●', 'GruvboxBlue'}},
+            },
+          },
+        }
+      })
+
+      require('luasnip.loaders.from_vscode').lazy_load()
+      require('luasnip.loaders.from_vscode').lazy_load({
+        paths = { vim.fn.stdpath 'config' .. '/snippets' }
+      })
 
       return {
         snippet = {
@@ -65,6 +59,25 @@ return {
           },
           ['<C-b>'] = cmp.mapping.scroll_docs( -4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-q>'] = cmp.mapping.complete({}),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
         },
         sources = {
           { name = 'nvim_lsp' },
