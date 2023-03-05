@@ -32,3 +32,5 @@ vim.api.nvim_set_keymap(
   ':lcd %:p:h<cr>',
   { silent = true, desc = '[C]hange [D]irectory to opened file' }
 )
+
+vim.keymap.set({ 'c' }, '<c-space>', '<c-y>', { silent = true })
