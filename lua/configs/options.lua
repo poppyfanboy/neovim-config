@@ -23,8 +23,8 @@ vim.o.fixendofline = true
 vim.o.textwidth = 100
 
 vim.o.timeout = true
-vim.o.timeoutlen = 300
-vim.o.updatetime = 250
+vim.o.timeoutlen = 400
+vim.o.updatetime = 350
 
 vim.o.formatoptions = 'jcrqlnto'
 

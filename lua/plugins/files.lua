@@ -24,16 +24,16 @@ return {
           if vim.wo.diff then return ']c' end
           vim.schedule(function() gs.next_hunk() end)
           return '<Ignore>'
-        end, {expr=true})
+        end, { expr = true })
 
         map('n', '[c', function()
           if vim.wo.diff then return '[c' end
           vim.schedule(function() gs.prev_hunk() end)
           return '<Ignore>'
-        end, {expr=true})
+        end, { expr = true })
 
-        map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-        map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+        map({ 'n', 'v' }, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+        map({ 'n', 'v' }, '<leader>hr', ':Gitsigns reset_hunk<CR>')
         map('n', '<leader>hu', gs.undo_stage_hunk)
         map('n', '<leader>hp', gs.preview_hunk)
         map('n', '<leader>hd', gs.diffthis)
@@ -48,8 +48,8 @@ return {
       diagnostics = {
         { enabled = true, icon = ' ' }, -- error
         { enabled = true, icon = ' ' }, -- warn
-        { enabled = false }, -- info
-        { enabled = false }, -- hint
+        { enabled = false },             -- info
+        { enabled = false },             -- hint
       },
     },
     config = function(_, opts)

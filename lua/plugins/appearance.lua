@@ -33,14 +33,22 @@ return {
     config = function()
       local function keymap()
         if vim.opt.iminsert:get() > 0 and vim.b['keymap_name'] then
-          return '⌨ ' .. vim.b['keymap_name']
+          return '󰥻 ' .. vim.b['keymap_name']
         end
         return ''
       end
 
       require('lualine').setup({
         options = {
-          disabled_filetypes = { 'NvimTree' },
+          disabled_filetypes = {
+            'NvimTree',
+            'dapui_scopes',
+            'dapui_breakpoints',
+            'dapui_stacks',
+            'dapui_watches',
+            'dap-repl',
+            'dapui_console',
+          },
         },
         sections = {
           lualine_a = { 'mode', keymap },

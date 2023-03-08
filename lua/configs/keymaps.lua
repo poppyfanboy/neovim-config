@@ -18,12 +18,9 @@ vim.keymap.set({ 'i', 'c' }, '<c-l>', '<c-^>', {})
 vim.keymap.set({ 'n' }, '<c-l>', 'i<c-^><esc>', {})
 
 if vim.g.neovide then
-  vim.api.nvim_set_keymap(
-    'n',
-    '<leader>fs',
-    ':lua vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen<cr>',
-    { silent = true, desc = 'Toggle [F]ull[S]creen' }
-  )
+  vim.keymap.set('n', '<leader>fs', function()
+    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+  end)
 end
 
 vim.keymap.set({ 'n' }, ']q', '<cmd>cnext<cr>', { silent = true })
