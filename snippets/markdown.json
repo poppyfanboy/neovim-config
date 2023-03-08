@@ -1,10 +1,14 @@
 {
   "Em-dash HTML entity": {
-    "prefix": "md",
-    "body": ["&mdash;"]
+    "prefix": "mdash",
+    "body": ["—"]
+  },
+  "Cross multiplication sign": {
+    "prefix": "times",
+    "body": ["×"]
   },
   "Minus HTML entity": {
-    "prefix": "min",
-    "body": ["&minus;"]
+    "prefix": "minus",
+    "body": ["−"]
   }
 }

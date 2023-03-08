@@ -11,6 +11,34 @@ return {
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, l, r, opts)
+        end
+
+        map('n', ']c', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() gs.next_hunk() end)
+          return '<Ignore>'
+        end, {expr=true})
+
+        map('n', '[c', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() gs.prev_hunk() end)
+          return '<Ignore>'
+        end, {expr=true})
+
+        map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+        map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+        map('n', '<leader>hu', gs.undo_stage_hunk)
+        map('n', '<leader>hp', gs.preview_hunk)
+        map('n', '<leader>hd', gs.diffthis)
+        map('n', '<leader>td', gs.toggle_deleted)
+      end
     },
   },
   {
@@ -30,6 +58,11 @@ return {
       local keymap_opts = { noremap = true, silent = true }
       vim.api.nvim_set_keymap('n', '<A-p>', '<Cmd>BufferPrevious<cr>', keymap_opts)
       vim.api.nvim_set_keymap('n', '<A-n>', '<Cmd>BufferNext<cr>', keymap_opts)
+      vim.api.nvim_set_keymap('n', '<A-c>c', '<Cmd>BufferClose<cr>', keymap_opts)
+      vim.api.nvim_set_keymap('n', '<A-c>C', '<Cmd>BufferClose!<cr>', keymap_opts)
+      vim.api.nvim_set_keymap('n', '<A-c>h', '<Cmd>BufferCloseBuffersLeft<cr>', keymap_opts)
+      vim.api.nvim_set_keymap('n', '<A-c>l', '<Cmd>BufferCloseBuffersRight<cr>', keymap_opts)
+      vim.api.nvim_set_keymap('n', '<leader>bp', '<cmd>BufferPick<cr>', keymap_opts)
     end,
   },
   {
@@ -79,7 +112,11 @@ return {
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+    build = table.concat({
+      'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release',
+      'cmake --build build --config Release',
+      'cmake --install build --prefix build',
+    }, ' && ')
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -111,6 +148,7 @@ return {
       vim.keymap.set('n', '<leader>fhf', '<cmd>Telescope find_files hidden=true<cr>')
       vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
       vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>')
+      vim.keymap.set('n', '<leader>fc', '<cmd>Telescope command_history<cr>')
     end,
   },
 }

@@ -18,8 +18,9 @@ vim.opt.listchars:append('space:·')
 vim.opt.listchars:append('tab:-->')
 
 vim.o.termguicolors = true
+vim.o.guifont = 'CaskaydiaCove NFM:h14'
 
 if vim.g.neovide then
   vim.g.neovide_hide_mouse_when_typing = true
-  vim.o.guifont = 'CaskaydiaCove NFM:h13'
+  vim.g.neovide_no_idle = true
 end

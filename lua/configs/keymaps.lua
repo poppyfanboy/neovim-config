@@ -26,14 +26,7 @@ if vim.g.neovide then
   )
 end
 
-vim.api.nvim_set_keymap(
-  'n',
-  '<leader>cd',
-  ':lcd %:p:h<cr>',
-  { silent = true, desc = '[C]hange [D]irectory to opened file' }
-)
-
-vim.keymap.set({ 'c' }, '<c-space>', '<c-y>', { silent = true })
-
 vim.keymap.set({ 'n' }, ']q', '<cmd>cnext<cr>', { silent = true })
 vim.keymap.set({ 'n' }, '[q', '<cmd>cprev<cr>', { silent = true })
+
+vim.keymap.set({ 'n' }, '<leader>qa', '<cmd>qa!<cr>')

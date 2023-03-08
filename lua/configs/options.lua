@@ -29,3 +29,9 @@ vim.o.updatetime = 250
 vim.o.formatoptions = 'jcrqlnto'
 
 vim.g.python3_host_prog = 'python'
+vim.g.zip_zipcmd = os.getenv('ZIP_COMMAND') or 'zip'
+vim.g.zip_unzipcmd = os.getenv('UNZIP_COMMAND') or 'unzip'
+
+if vim.g.neovide then
+  vim.g.neovide_confirm_quit = false
+end

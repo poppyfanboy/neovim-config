@@ -4,8 +4,9 @@ return {
     config = true,
   },
   {
-    'kylechui/nvim-surround',
-    config = true,
+    -- 'kylechui/nvim-surround' acts weird from time to time
+    'tpope/vim-surround',
+    dependencies = { 'tpope/vim-repeat' },
   },
   {
     'windwp/nvim-autopairs',
@@ -19,5 +20,11 @@ return {
         cmp_autopairs.on_confirm_done()
       )
     end,
+  },
+  {
+    'ggandor/leap.nvim',
+    config = function ()
+      require('leap').add_default_mappings()
+    end
   },
 }
