@@ -1,5 +1,24 @@
 return {
   {
+    'lukas-reineke/indent-blankline.nvim',
+    opts = function()
+      local opts = {
+        context_char = '▏',
+        show_current_context = true,
+        show_current_context_start = false,
+        show_end_of_line = true,
+        use_treesitter = true,
+      }
+
+      -- this option looks janky in terminal emulators
+      if (vim.g.neovide) then
+        opts.show_current_context_start = true
+      end
+
+      return opts
+    end
+  },
+  {
     'folke/tokyonight.nvim',
     config = function()
       vim.cmd.colorscheme('tokyonight')
