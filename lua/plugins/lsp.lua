@@ -67,4 +67,19 @@ return {
       }
     end,
   },
+  {
+    'simrat39/rust-tools.nvim',
+    dependencies = { 'mfussenegger/nvim-dap' },
+    config = function()
+      require('rust-tools').setup({
+        dap = {
+          adapter = require('rust-tools.dap').get_codelldb_adapter(
+            -- FIXME: at least disable loading this extension on platforms other than windows...
+            vim.fn.stdpath 'data' .. '\\mason\\packages\\codelldb\\extension\\adapter\\codelldb.exe',
+            vim.fn.stdpath 'data' .. '\\mason\\packages\\codelldb\\extension\\lldb\\bin\\liblldb.dll'
+          ),
+        }
+      })
+    end,
+  },
 }

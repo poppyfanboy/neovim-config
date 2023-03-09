@@ -10,8 +10,9 @@ return {
   },
   {
     'windwp/nvim-autopairs',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function ()
-      require('nvim-autopairs').setup({})
+      require('nvim-autopairs').setup({ check_ts = true })
 
       local cmp_autopairs = require('nvim-autopairs.completion.cmp')
       local cmp = require('cmp')

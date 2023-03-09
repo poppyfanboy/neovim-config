@@ -1,5 +1,5 @@
 {
-  "Em-dash HTML entity": {
+  "Em-dash symbol": {
     "prefix": "mdash",
     "body": ["—"]
   },
@@ -7,7 +7,7 @@
     "prefix": "times",
     "body": ["×"]
   },
-  "Minus HTML entity": {
+  "Minus sign": {
     "prefix": "minus",
     "body": ["−"]
   }
