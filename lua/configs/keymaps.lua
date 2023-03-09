@@ -27,3 +27,5 @@ vim.keymap.set({ 'n' }, ']q', '<cmd>cnext<cr>', { silent = true })
 vim.keymap.set({ 'n' }, '[q', '<cmd>cprev<cr>', { silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>qa', '<cmd>qa!<cr>')
+
+vim.keymap.set({ 'n' }, '<leader>et', '<cmd>Lex 20<cr>')

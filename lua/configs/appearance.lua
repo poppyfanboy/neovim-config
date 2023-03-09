@@ -20,6 +20,8 @@ vim.opt.listchars:append('tab:-->')
 vim.o.termguicolors = true
 vim.o.guifont = 'CaskaydiaCove NFM:h14'
 
+vim.g.netrw_banner = false
+
 if vim.g.neovide then
   vim.g.neovide_hide_mouse_when_typing = true
   vim.g.neovide_no_idle = true

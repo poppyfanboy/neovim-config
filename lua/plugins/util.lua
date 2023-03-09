@@ -1,11 +1,5 @@
 return {
   {
-    'iamcco/markdown-preview.nvim',
-    build = function()
-      vim.fn['mkdp#util#install']()
-    end
-  },
-  {
     'akinsho/toggleterm.nvim',
     version = '*',
     config = function()
@@ -19,24 +13,6 @@ return {
 
       vim.keymap.set(
         { 'n' },
-        '<leader>tt',
-        [[<C-\><C-n>:ToggleTermToggleAll<cr>]],
-        { desc = 'Toggle all terminals', silent = true }
-      )
-      vim.keymap.set(
-        { 'n' },
-        '<leader>t1',
-        [[<C-\><C-n>:ToggleTerm 1<cr>]],
-        { desc = 'Open first terminal', silent = true }
-      )
-      vim.keymap.set(
-        { 'n' },
-        '<leader>t2',
-        [[<C-\><C-n>:ToggleTerm 2<cr>]],
-        { desc = 'Open second terminal', silent = true }
-      )
-      vim.keymap.set(
-        { 'n' },
         '<leader>tf',
         [[<C-\><C-n>:ToggleTerm 3 direction=float<cr>]],
         { desc = 'Open floating terminal', silent = true }
@@ -45,12 +21,4 @@ return {
       require('toggleterm').setup()
     end
   },
-  {
-    'folke/todo-comments.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('todo-comments').setup({})
-    end,
-  },
-  'kevinhwang91/nvim-bqf',
 }
