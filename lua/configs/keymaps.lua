@@ -42,11 +42,11 @@ vim.keymap.set({ 'i' }, '<c-f>', '<c-g>u<Esc>[s1z=`]a<c-g>u')
 vim.keymap.set({ 'i' }, '<C-z>', '<C-o>zz')
 vim.keymap.set({ 'n' }, '<C-u>', function()
     local height = math.floor(vim.fn.winheight(0) / 4)
-    vim.cmd.normal(vim.api.nvim_replace_termcodes(height .. '<C-y>', true, true, true))
+    vim.cmd.normal(vim.api.nvim_replace_termcodes(height .. '<C-y>M', true, true, true))
 end)
 vim.keymap.set({ 'n' }, '<C-d>', function()
     local height = math.floor(vim.fn.winheight(0) / 4)
-    vim.cmd.normal(vim.api.nvim_replace_termcodes(height .. '<C-e>', true, true, true))
+    vim.cmd.normal(vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true))
 end)
 
 vim.keymap.set({ 'n' }, '<leader>co', '<cmd>copen<cr>', {

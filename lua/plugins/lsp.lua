@@ -161,7 +161,7 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        ft = { 'lua' },
+        ft = { 'lua', 'rust' },
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'williamboman/mason.nvim',
@@ -213,7 +213,7 @@ return {
                         filetypes = (servers[server_name] or {}).filetypes,
                     })
                 end,
-                ['rust_analyzer'] = function() end,
+                rust_analyzer = function() end,
             })
         end,
     },
@@ -221,13 +221,49 @@ return {
         'simrat39/rust-tools.nvim',
         ft = { 'rust' },
         config = function()
+            local adapter
+
+            local ok, mason_registry = pcall(require, 'mason-registry')
+            if ok then
+                local codelldb = mason_registry.get_package('codelldb')
+                local extension_path = codelldb:get_install_path() .. '/extension/'
+                local codelldb_path = extension_path .. 'adapter/codelldb'
+                local liblldb_path = ''
+
+                if vim.fn.has('win32') then
+                    liblldb_path = extension_path .. 'lldb\\bin\\liblldb.dll'
+                elseif vim.fn.has('linux') then
+                    liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+                end
+
+                if liblldb_path ~= '' then
+                    adapter = require('rust-tools.dap').get_codelldb_adapter(
+                        codelldb_path,
+                        liblldb_path
+                    )
+                end
+            end
+
             require('rust-tools').setup({
+                dap = {
+                    adapter = adapter,
+                },
                 server = {
+                    capabilities = capabilities,
                     on_attach = on_attach,
+                    standalone = false,
+                    checkOnSave = {
+                        allFeatures = true,
+                        command = 'clippy',
+                        extraArgs = { '--no-deps' },
+                    },
                 },
                 tools = {
                     hover_actions = {
                         auto_focus = true,
+                    },
+                    inlay_hints = {
+                        only_current_line = true,
                     },
                 },
             })

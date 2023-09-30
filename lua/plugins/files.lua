@@ -99,6 +99,8 @@ return {
             { '<leader>sb',  '<cmd>Telescope buffers<cr>',               desc = '[s]earch [b]uffers' },
             { '<leader>sc',  '<cmd>Telescope command_history<cr>',       desc = '[s]earch [c]ommand history' },
             { '<leader>sg',  '<cmd>Telescope live_grep<cr>',             desc = '[s]earch [g]rep' },
+            { '<leader>sm',  '<cmd>Telescope marks<cr>',                 desc = '[s]earch [m]arks' },
+            { '<leader>sj',  '<cmd>Telescope jumplist<cr>',              desc = '[s]earch [j]umplist' },
             { '<leader>sh',  '<cmd>Telescope help_tags<cr>',             desc = '[s]earch [g]help' },
             { '<leader>lga', '<cmd>Telescope live_grep_args<cr>',        desc = '[l]ive [g]rep [a]rgs' },
             { '<leader>su',  '<cmd>Telescope undo<cr>',                  desc = '[s]earch [u]ndo' },

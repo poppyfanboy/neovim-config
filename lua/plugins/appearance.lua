@@ -1,5 +1,21 @@
 return {
     {
+        'nvim-treesitter/nvim-treesitter-context',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
+        event = { 'BufReadPost', 'BufNewFile' },
+        config = function()
+            require('treesitter-context').setup({
+                enable = false,
+            })
+
+            vim.keymap.set({ 'n', 'v' }, '<leader>cc', '<cmd>TSContextToggle<cr>', {
+                desc = 'context toggle',
+            })
+        end,
+    },
+    {
         'rebelot/kanagawa.nvim',
         config = function()
             require('kanagawa').setup({
@@ -14,9 +30,10 @@ return {
     {
         'lukas-reineke/indent-blankline.nvim',
         event = 'VeryLazy',
-        config = function()
-            local config = {
-                filetype_exclude = {
+        main = 'ibl',
+        opts = {
+            exclude = {
+                filetypes = {
                     'dashboard',
                     'lspinfo',
                     'checkhealth',
@@ -24,19 +41,14 @@ return {
                     'man',
                     '',
                 },
-                show_current_context = true,
-                show_end_of_line = true,
-                context_char = '┃',
-            }
-
-            if vim.g.neovide then
-                config.char = '▏'
-                config.context_char = '▏'
-                config.show_current_context_start = true
-            end
-
-            require('indent_blankline').setup(config)
-        end,
+            },
+            scope = {
+                enabled = true,
+                show_start = false,
+                show_end = false,
+                highlight = { 'Function' },
+            },
+        },
     },
     {
         'nvim-lualine/lualine.nvim',
@@ -122,7 +134,6 @@ return {
                 sections = {
                     lualine_a = {},
                     lualine_c = {
-                        'filename',
                         lsp_status_section,
                     },
                     lualine_x = { keymap, 'encoding', 'fileformat', 'filetype' },
@@ -272,6 +283,19 @@ return {
                 callback = function()
                     require('barbecue.ui').update()
                 end,
+            })
+        end,
+    },
+    {
+        'RRethy/vim-illuminate',
+        event = { 'CursorHold', 'CursorHoldI' },
+        config = function()
+            vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'Visual' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'Visual' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { link = 'Visual' })
+
+            require('illuminate').configure({
+                delay = 750,
             })
         end,
     },
