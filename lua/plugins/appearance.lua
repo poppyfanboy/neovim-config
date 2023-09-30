@@ -290,9 +290,9 @@ return {
         'RRethy/vim-illuminate',
         event = { 'CursorHold', 'CursorHoldI' },
         config = function()
-            vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'Visual' })
-            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'Visual' })
-            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { link = 'Visual' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'Search' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'Search' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { link = 'Search' })
 
             require('illuminate').configure({
                 delay = 750,

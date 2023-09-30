@@ -48,6 +48,8 @@ vim.keymap.set({ 'n' }, '<C-d>', function()
     local height = math.floor(vim.fn.winheight(0) / 4)
     vim.cmd.normal(vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true))
 end)
+vim.keymap.set({ 'n', 'i' }, '<a-h>', '15zh');
+vim.keymap.set({ 'n', 'i' }, '<a-l>', '15zl');
 
 vim.keymap.set({ 'n' }, '<leader>co', '<cmd>copen<cr>', {
     desc = 'Open quickfix list ([c][o]pen)',

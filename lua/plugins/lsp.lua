@@ -4,6 +4,8 @@ local function on_attach(client, buffer)
     require('lsp_signature').on_attach({
         hint_prefix = '',
         doc_lines = 0,
+        toggle_key = '<c-j>',
+        toggle_key_flip_floatwin_setting = true,
     }, buffer)
 
     if client.name == 'rust_analyzer' then
@@ -62,6 +64,7 @@ return {
             'L3MON4D3/LuaSnip',
             'saadparwaiz1/cmp_luasnip',
             'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-buffer',
             'rafamadriz/friendly-snippets',
         },
         event = 'InsertEnter',
@@ -106,6 +109,7 @@ return {
                 sources = {
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
+                    { name = 'buffer' },
                 },
                 formatting = {
                     format = function(entry, vim_item)
