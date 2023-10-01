@@ -13,49 +13,67 @@ return {
         keys = {
             {
                 '<leader>db',
-                function() require('dap').toggle_breakpoint() end,
+                function()
+                    require('dap').toggle_breakpoint()
+                end,
                 desc = '[d]ebug [b]reakpoint',
             },
             {
                 '<leader>dc',
-                function() require('dap').continue() end,
+                function()
+                    require('dap').continue()
+                end,
                 desc = '[d]ebug [c]ontinue',
             },
             {
                 '<leader>dC',
-                function() require('dap').run_to_cursor() end,
+                function()
+                    require('dap').run_to_cursor()
+                end,
                 desc = '[d]ebug [C]ontinue to cursor',
             },
             {
                 '<leader>di',
-                function() require('dap').step_into() end,
+                function()
+                    require('dap').step_into()
+                end,
                 desc = '[d]ebug step [i]nto',
             },
             {
                 '<leader>do',
-                function() require('dap').step_over() end,
+                function()
+                    require('dap').step_over()
+                end,
                 desc = '[d]ebug step [o]ver',
             },
             {
                 '<leader>dO',
-                function() require('dap').step_out() end,
+                function()
+                    require('dap').step_out()
+                end,
                 desc = '[d]ebug step [O]ut',
             },
             {
                 '<leader>dd',
-                function() require('dapui').toggle() end,
+                function()
+                    require('dapui').toggle()
+                end,
                 desc = 'Toggle DAP UI',
             },
             {
                 '<leader>dP',
-                function() require('dap').pause() end,
+                function()
+                    require('dap').pause()
+                end,
                 desc = '[d]ebug [P]ause',
             },
             {
                 '<leader>dh',
-                function() require('dap.ui.widgets').hover() end,
+                function()
+                    require('dap.ui.widgets').hover()
+                end,
                 desc = '[d]ebug [h]over',
-            }
+            },
         },
         config = function()
             local dap = require('dap')

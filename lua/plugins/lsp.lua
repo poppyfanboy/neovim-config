@@ -9,15 +9,10 @@ local function on_attach(client, buffer)
     }, buffer)
 
     if client.name == 'rust_analyzer' then
-        vim.keymap.set(
-            { 'n' },
-            '<leader>ha',
-            require('rust-tools').hover_actions.hover_actions,
-            {
-                desc = '[h]over [a]ctions',
-                buffer = buffer,
-            }
-        )
+        vim.keymap.set({ 'n' }, '<leader>ha', require('rust-tools').hover_actions.hover_actions, {
+            desc = '[h]over [a]ctions',
+            buffer = buffer,
+        })
     end
 
     vim.keymap.set({ 'n' }, '<leader>rn', vim.lsp.buf.rename, {
@@ -87,9 +82,11 @@ return {
                             virt_text = { { '󰧞' } },
                         },
                     },
-                }
+                },
             })
-            vim.keymap.set({ 'n' }, '<leader>sa', function() luasnip.unlink_current() end, {
+            vim.keymap.set({ 'n' }, '<leader>sa', function()
+                luasnip.unlink_current()
+            end, {
                 desc = '[s]nippet [a]bort',
                 silent = true,
             })
@@ -160,9 +157,18 @@ return {
             'nvim-lua/plenary.nvim',
             'jose-elias-alvarez/null-ls.nvim',
         },
-        opts = {
-            ensure_installed = { 'stylua' },
-        },
+        config = function()
+            require('mason-null-ls').setup({
+                ensure_installed = { 'stylua' },
+            })
+
+            local null_ls = require('null-ls')
+            null_ls.setup({
+                sources = {
+                    null_ls.builtins.formatting.stylua,
+                },
+            })
+        end,
     },
     {
         'nvim-lua/lsp-status.nvim',
@@ -224,7 +230,8 @@ return {
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-            capabilities = vim.tbl_extend('keep', capabilities or {}, require('lsp-status').capabilities)
+            capabilities =
+                vim.tbl_extend('keep', capabilities or {}, require('lsp-status').capabilities)
 
             local mason_lspconfig = require('mason-lspconfig')
             mason_lspconfig.setup({
@@ -263,10 +270,8 @@ return {
                 end
 
                 if liblldb_path ~= '' then
-                    adapter = require('rust-tools.dap').get_codelldb_adapter(
-                        codelldb_path,
-                        liblldb_path
-                    )
+                    adapter =
+                        require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path)
                 end
             end
 
@@ -284,7 +289,7 @@ return {
                                 command = 'clippy',
                                 extraArgs = { '--no-deps' },
                             },
-                        }
+                        },
                     },
                     -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
                     root_dir = function(...)

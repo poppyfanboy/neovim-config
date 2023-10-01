@@ -93,9 +93,24 @@ return {
         'sindrets/diffview.nvim',
         cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
         keys = {
-            { '<leader>dvo', [[<cmd>DiffviewOpen<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [o]pen' },
-            { '<leader>dvc', [[<cmd>DiffviewClose<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [c]lose' },
-            { '<leader>dvf', [[<cmd>DiffviewFileHistory %<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [f]ile history' },
+            {
+                '<leader>dvo',
+                [[<cmd>DiffviewOpen<cr>]],
+                mode = { 'n' },
+                desc = '[d]iff [v]iew [o]pen',
+            },
+            {
+                '<leader>dvc',
+                [[<cmd>DiffviewClose<cr>]],
+                mode = { 'n' },
+                desc = '[d]iff [v]iew [c]lose',
+            },
+            {
+                '<leader>dvf',
+                [[<cmd>DiffviewFileHistory %<cr>]],
+                mode = { 'n' },
+                desc = '[d]iff [v]iew [f]ile history',
+            },
         },
     },
 }

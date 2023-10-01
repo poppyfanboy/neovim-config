@@ -71,7 +71,7 @@ return {
             local spinner_symbols = { '◜', '◠', '◝', '◞', '◡', '◟' }
             local lsp_server_icon = {
                 lua_ls = '',
-                rust_analyzer = ''
+                rust_analyzer = '',
             }
 
             local function lsp_status_section()
@@ -94,10 +94,12 @@ return {
                     return ''
                 end
 
-                local contents = string.format('%s %s', last_message.title, last_message.message or '')
+                local contents =
+                    string.format('%s %s', last_message.title, last_message.message or '')
 
                 if last_message.spinner ~= nil then
-                    local spinner_symbol = spinner_symbols[(last_message.spinner % #spinner_symbols) + 1]
+                    local spinner_symbol =
+                        spinner_symbols[(last_message.spinner % #spinner_symbols) + 1]
                     contents = string.format('%s %s', spinner_symbol, contents)
                 end
 
@@ -109,7 +111,6 @@ return {
 
                 return string.sub(contents, 1, 40)
             end
-
 
             require('lualine').setup({
                 options = {
@@ -248,11 +249,7 @@ return {
                     '　Open configs',
                     [[<cmd>lua vim.cmd.e(vim.fn.stdpath('config')); vim.cmd.norm('`')<cr>]]
                 ),
-                dashboard.button(
-                    'p',
-                    '　Open projects',
-                    [[<cmd>e ~/Documents/projects<cr>]]
-                ),
+                dashboard.button('p', '　Open projects', [[<cmd>e ~/Documents/projects<cr>]]),
                 dashboard.button('l', '󰒲　Lazy', [[<cmd>Lazy<cr>]]),
                 dashboard.button('m', '󰣪　Mason', [[<cmd>Mason<cr>]]),
                 dashboard.button('q', '󰍃　Quit', [[<cmd>qa!<cr>]]),

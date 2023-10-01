@@ -87,7 +87,7 @@ return {
                             ['<c-l>'] = { '<c-^>', type = 'command' },
                         },
                     },
-                }
+                },
             })
 
             telescope.load_extension('undo')
@@ -95,19 +95,63 @@ return {
             telescope.load_extension('fzf')
         end,
         keys = {
-            { '<leader>sf',  '<cmd>Telescope find_files<cr>',            desc = '[s]earch [f]iles' },
-            { '<leader>sb',  '<cmd>Telescope buffers<cr>',               desc = '[s]earch [b]uffers' },
-            { '<leader>sc',  '<cmd>Telescope command_history<cr>',       desc = '[s]earch [c]ommand history' },
-            { '<leader>sg',  '<cmd>Telescope live_grep<cr>',             desc = '[s]earch [g]rep' },
-            { '<leader>sm',  '<cmd>Telescope marks<cr>',                 desc = '[s]earch [m]arks' },
-            { '<leader>sj',  '<cmd>Telescope jumplist<cr>',              desc = '[s]earch [j]umplist' },
-            { '<leader>sh',  '<cmd>Telescope help_tags<cr>',             desc = '[s]earch [g]help' },
-            { '<leader>lga', '<cmd>Telescope live_grep_args<cr>',        desc = '[l]ive [g]rep [a]rgs' },
-            { '<leader>su',  '<cmd>Telescope undo<cr>',                  desc = '[s]earch [u]ndo' },
-            { '<leader>ds',  '<cmd>Telescope lsp_document_symbols<cr>',  desc = '[d]ocument [s]ymbols' },
-            { '<leader>ws',  '<cmd>Telescope lsp_workspace_symbols<cr>', desc = '[w]orkspace [s]ymbols' },
-            { 'gr',          '<cmd>Telescope lsp_references<cr>',        desc = 'Show references (LSP)' },
-            { 'gI',          '<cmd>Telescope lsp_implementations<cr>',   desc = 'Show implementations (LSP)' },
+            {
+                '<leader>sf',
+                '<cmd>Telescope find_files<cr>',
+                desc = '[s]earch [f]iles',
+            },
+            {
+                '<leader>sb',
+                '<cmd>Telescope buffers<cr>',
+                desc = '[s]earch [b]uffers',
+            },
+            {
+                '<leader>sc',
+                '<cmd>Telescope command_history<cr>',
+                desc = '[s]earch [c]ommand history',
+            },
+            { '<leader>sg', '<cmd>Telescope live_grep<cr>', desc = '[s]earch [g]rep' },
+            {
+                '<leader>sm',
+                '<cmd>Telescope marks<cr>',
+                desc = '[s]earch [m]arks',
+            },
+            {
+                '<leader>sj',
+                '<cmd>Telescope jumplist<cr>',
+                desc = '[s]earch [j]umplist',
+            },
+            {
+                '<leader>sh',
+                '<cmd>Telescope help_tags<cr>',
+                desc = '[s]earch [g]help',
+            },
+            {
+                '<leader>lga',
+                '<cmd>Telescope live_grep_args<cr>',
+                desc = '[l]ive [g]rep [a]rgs',
+            },
+            { '<leader>su', '<cmd>Telescope undo<cr>',      desc = '[s]earch [u]ndo' },
+            {
+                '<leader>ds',
+                '<cmd>Telescope lsp_document_symbols<cr>',
+                desc = '[d]ocument [s]ymbols',
+            },
+            {
+                '<leader>ws',
+                '<cmd>Telescope lsp_workspace_symbols<cr>',
+                desc = '[w]orkspace [s]ymbols',
+            },
+            {
+                'gr',
+                '<cmd>Telescope lsp_references<cr>',
+                desc = 'Show references (LSP)',
+            },
+            {
+                'gI',
+                '<cmd>Telescope lsp_implementations<cr>',
+                desc = 'Show implementations (LSP)',
+            },
         },
     },
     {
