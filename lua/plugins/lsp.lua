@@ -278,11 +278,18 @@ return {
                     capabilities = capabilities,
                     on_attach = on_attach,
                     standalone = false,
-                    checkOnSave = {
-                        allFeatures = true,
-                        command = 'clippy',
-                        extraArgs = { '--no-deps' },
+                    settings = {
+                        ['rust-analyzer'] = {
+                            checkOnSave = {
+                                command = 'clippy',
+                                extraArgs = { '--no-deps' },
+                            },
+                        }
                     },
+                    -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
+                    root_dir = function(...)
+                        return vim.loop.cwd()
+                    end,
                 },
                 tools = {
                     hover_actions = {

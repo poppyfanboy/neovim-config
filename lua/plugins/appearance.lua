@@ -124,6 +124,7 @@ return {
                             'dapui_watches',
                             'dap-repl',
                             'dapui_console',
+                            'DiffviewFiles',
                         },
                     },
                 },

@@ -14,7 +14,9 @@ return {
         dependencies = {
             'nvim-tree/nvim-web-devicons',
         },
-        config = true,
+        opts = {
+            auto_preview = false,
+        },
         keys = {
             { '<leader>tt', '<cmd>TroubleToggle<cr>', mode = { 'n' }, desc = '[t]oggle [t]rouble' },
         },
