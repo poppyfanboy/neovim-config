@@ -228,11 +228,10 @@ return {
 
             dashboard.section.header.val = headers[math.random(1, #headers)]
 
-            local datetime = os.date('%d-%m-%Y %H:%M')
             local version = vim.version()
             dashboard.section.footer.val = {
                 '',
-                datetime,
+                string.format('Neovim v%s.%s.%s', version.major, version.minor, version.patch),
             }
             dashboard.section.footer.opts.position = 'center'
 
@@ -288,7 +287,7 @@ return {
     },
     {
         'RRethy/vim-illuminate',
-        event = { 'CursorHold', 'CursorHoldI' },
+        event = 'VeryLazy',
         config = function()
             vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'Search' })
             vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'Search' })

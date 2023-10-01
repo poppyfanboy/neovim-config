@@ -46,6 +46,16 @@ return {
                 function() require('dapui').toggle() end,
                 desc = 'Toggle DAP UI',
             },
+            {
+                '<leader>dp',
+                function() require('dap').pause() end,
+                desc = '[d]ebug [p]ause',
+            },
+            {
+                '<leader>dh',
+                function() require('dap.ui.widgets').hover() end,
+                desc = '[d]ebug [h]over',
+            }
         },
         config = function()
             local dap = require('dap')
@@ -108,13 +118,6 @@ return {
             dap.listeners.after.event_initialized['dapui_config'] = dapui.open
             dap.listeners.before.event_terminated['dapui_config'] = dapui.close
             dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
-            -- https://github.com/mfussenegger/nvim-dap/discussions/355
-            vim.api.nvim_set_hl(0, 'DapBreakpoint', { ctermbg = 0, fg = '#e82424' })
-            vim.api.nvim_set_hl(0, 'DapStopped', { ctermbg = 0, fg = '#98bb6c' })
-
-            vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint' })
-            vim.fn.sign_define('DapStopped', { text = '', texthl = 'DapStopped' })
         end,
     },
 }

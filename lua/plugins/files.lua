@@ -125,12 +125,6 @@ return {
                 exclude_ft = { 'oil' },
                 icons = {
                     button = false,
-                    diagnostics = {
-                        [vim.diagnostic.severity.ERROR] = { enabled = false },
-                        [vim.diagnostic.severity.WARN] = { enabled = false },
-                        [vim.diagnostic.severity.INFO] = { enabled = false },
-                        [vim.diagnostic.severity.HINT] = { enabled = false },
-                    },
                 },
             })
 
