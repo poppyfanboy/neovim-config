@@ -3,10 +3,20 @@ return {
         'nvim-treesitter/nvim-treesitter',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
+            local function disable(language, buffer)
+                return vim.api.nvim_buf_line_count(buffer) > require('util').large_file_lines_count
+            end
+
             require('nvim-treesitter.configs').setup({
-                ensure_installed = { 'cpp', 'rust', 'json', 'xml', 'lua', 'yaml' },
-                highlight = { enable = true },
-                matchup = { enable = true },
+                ensure_installed = { 'cpp', 'rust', 'json', 'xml', 'lua', 'yaml', 'toml' },
+                highlight = {
+                    enable = true,
+                    disable = disable,
+                },
+                matchup = {
+                    enable = true,
+                    disable = disable,
+                },
             })
         end,
     },

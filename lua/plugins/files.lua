@@ -139,7 +139,7 @@ return {
             },
             {
                 '<leader>ws',
-                '<cmd>Telescope lsp_workspace_symbols<cr>',
+                '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>',
                 desc = '[w]orkspace [s]ymbols',
             },
             {
@@ -182,15 +182,11 @@ return {
                 desc = 'Go to next buffer',
             })
 
-            vim.keymap.set({ 'n' }, '<leader>bcc', '<cmd>BufferClose<cr>', {
-                desc = '[b]uffer [c]lose',
+            vim.keymap.set({ 'n' }, '<leader>X', '<cmd>BufferCloseAllButCurrent<cr>', {
+                desc = 'Close all buffers but current',
             })
-            vim.keymap.set({ 'n' }, '<leader>bca', '<cmd>BufferCloseAllButCurrent<cr>', {
-                desc = '[b]uffer [c]lose [a]ll',
-            })
-
-            vim.keymap.set({ 'n' }, '<leader>bdd', '<cmd>BufferClose!<cr>', {
-                desc = '[b]uffer [d]elete',
+            vim.keymap.set({ 'n' }, '<leader>x', '<cmd>BufferClose!<cr>', {
+                desc = 'Close current buffer',
             })
         end,
     },

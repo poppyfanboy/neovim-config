@@ -1,5 +1,7 @@
 local M = {}
 
+M.large_file_lines_count = 5000
+
 M.path_separator = '/'
 if vim.fn.has('win32') == 1 then
     M.path_separator = '\\'

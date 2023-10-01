@@ -49,6 +49,9 @@ return {
                 show_end = false,
                 highlight = { 'Function' },
             },
+            indent = {
+                tab_char = '│',
+            },
         },
     },
     {
@@ -294,6 +297,7 @@ return {
 
             require('illuminate').configure({
                 delay = 750,
+                large_file_cutoff = require('util').large_file_lines_count,
             })
         end,
     },

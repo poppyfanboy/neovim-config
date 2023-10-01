@@ -16,17 +16,6 @@ vim.o.shiftround = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
-vim.o.list = true
-local listchars = {
-    'eol:󰘌',
-    'trail:_',
-    'space:·',
-    'tab:-->',
-}
-for _, listchar in pairs(listchars) do
-    vim.opt.listchars:append(listchar)
-end
-
 vim.o.relativenumber = true
 vim.o.number = true
 vim.o.cursorline = true
@@ -51,9 +40,5 @@ vim.o.sidescrolloff = 3
 
 vim.o.spell = true
 vim.opt.spelllang = { 'en_us', 'ru' }
-
-if vim.g.neovide then
-    vim.o.guifont = 'Iosevka Nerd Font:h15'
-end
 
 vim.o.updatetime = 200

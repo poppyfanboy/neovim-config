@@ -151,7 +151,7 @@ return {
     },
     {
         'jay-babu/mason-null-ls.nvim',
-        ft = { 'lua', 'rust' },
+        ft = { 'lua' },
         dependencies = {
             'williamboman/mason.nvim',
             'nvim-lua/plenary.nvim',
@@ -193,7 +193,7 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        ft = { 'lua', 'rust' },
+        ft = { 'lua' },
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'williamboman/mason.nvim',
@@ -289,6 +289,9 @@ return {
                                 command = 'clippy',
                                 extraArgs = { '--no-deps' },
                             },
+                            diagnostics = {
+                                experimental = { enable = true },
+                            },
                         },
                     },
                     -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
@@ -302,6 +305,12 @@ return {
                     },
                     inlay_hints = {
                         only_current_line = true,
+                    },
+                    crate_graph = {
+                        backend = nil,
+                        full = false,
+                        output = nil,
+                        enabled_graphviz_backends = {},
                     },
                 },
             })
