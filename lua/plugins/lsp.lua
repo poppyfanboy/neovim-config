@@ -72,6 +72,27 @@ return {
             local cmp = require('cmp')
 
             local luasnip = require('luasnip')
+            local luasnip_types = require('luasnip.util.types')
+            luasnip.setup({
+                region_check_events = { 'InsertEnter', 'CursorMoved', 'CursorHold' },
+                delete_check_events = { 'TextChanged', 'InsertLeave' },
+                ext_opts = {
+                    [luasnip_types.choiceNode] = {
+                        active = {
+                            virt_text = { { '󰧞' } },
+                        },
+                    },
+                    [luasnip_types.insertNode] = {
+                        active = {
+                            virt_text = { { '󰧞' } },
+                        },
+                    },
+                }
+            })
+            vim.keymap.set({ 'n' }, '<leader>sa', function() luasnip.unlink_current() end, {
+                desc = '[s]nippet [a]bort',
+                silent = true,
+            })
             require('luasnip.loaders.from_vscode').lazy_load()
 
             cmp.setup({
