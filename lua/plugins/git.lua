@@ -89,4 +89,13 @@ return {
             { '<leader>g', [[<cmd>Git<cr>]], mode = { 'n' }, desc = 'open [g]it (fugitive)' },
         },
     },
+    {
+        'sindrets/diffview.nvim',
+        cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+        keys = {
+            { '<leader>dvo', [[<cmd>DiffviewOpen<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [o]pen' },
+            { '<leader>dvc', [[<cmd>DiffviewClose<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [c]lose' },
+            { '<leader>dvf', [[<cmd>DiffviewFileHistory %<cr>]], mode = { 'n' }, desc = '[d]iff [v]iew [f]ile history' },
+        },
+    },
 }
