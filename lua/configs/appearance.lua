@@ -16,12 +16,11 @@ vim.api.nvim_create_autocmd('ColorScheme', {
         vim.api.nvim_set_hl(0, 'DapStopped', { bg = sign_bg, fg = '#98bb6c' })
 
         for type, icon in pairs(lsp_signs) do
-            local highlight = 'Diagnostic' .. type
-            local fg_color = vim.api.nvim_get_hl(0, { name = highlight }).fg
+            local fg_color = vim.api.nvim_get_hl(0, { name = 'Diagnostic' .. type }).fg
 
             local sign = 'DiagnosticSign' .. type
-            vim.fn.sign_define(sign, { text = icon, texthl = highlight, numhl = '' })
-            vim.api.nvim_set_hl(0, highlight, { bg = sign_bg, fg = fg_color })
+            vim.fn.sign_define(sign, { text = icon, texthl = sign, numhl = '' })
+            vim.api.nvim_set_hl(0, sign, { bg = sign_bg, fg = fg_color })
         end
     end,
 })

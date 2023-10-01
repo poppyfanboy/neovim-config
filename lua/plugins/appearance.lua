@@ -39,6 +39,7 @@ return {
                     'checkhealth',
                     'help',
                     'man',
+                    'fugitive',
                     '',
                 },
             },

@@ -47,9 +47,9 @@ return {
                 desc = 'Toggle DAP UI',
             },
             {
-                '<leader>dp',
+                '<leader>dP',
                 function() require('dap').pause() end,
-                desc = '[d]ebug [p]ause',
+                desc = '[d]ebug [P]ause',
             },
             {
                 '<leader>dh',
