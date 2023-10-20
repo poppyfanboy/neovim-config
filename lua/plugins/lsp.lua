@@ -291,6 +291,7 @@ return {
                             },
                             diagnostics = {
                                 experimental = { enable = true },
+                                disabled = { 'inactive-code' },
                             },
                         },
                     },

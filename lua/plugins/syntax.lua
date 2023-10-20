@@ -8,7 +8,7 @@ return {
             end
 
             require('nvim-treesitter.configs').setup({
-                ensure_installed = { 'cpp', 'rust', 'json', 'xml', 'lua', 'yaml', 'toml' },
+                ensure_installed = { 'cpp', 'rust', 'json', 'xml', 'lua', 'yaml', 'toml', 'glsl' },
                 highlight = {
                     enable = true,
                     disable = disable,
@@ -96,5 +96,9 @@ return {
         config = function()
             vim.g.matchup_matchparen_offscreen['method'] = 'status_manual'
         end,
+    },
+    {
+        'rust-lang/rust.vim',
+        ft = { 'rust' },
     },
 }

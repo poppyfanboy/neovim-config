@@ -30,29 +30,35 @@ return {
     {
         'lukas-reineke/indent-blankline.nvim',
         event = 'VeryLazy',
-        main = 'ibl',
-        opts = {
-            exclude = {
-                filetypes = {
-                    'dashboard',
-                    'lspinfo',
-                    'checkhealth',
-                    'help',
-                    'man',
-                    'fugitive',
-                    '',
+        config = function()
+            local hooks = require('ibl.hooks')
+            hooks.register(hooks.type.SCOPE_ACTIVE, function(buffer)
+                return vim.api.nvim_buf_line_count(buffer) < require('util').large_file_lines_count
+            end)
+
+            require('ibl').setup({
+                exclude = {
+                    filetypes = {
+                        'dashboard',
+                        'lspinfo',
+                        'checkhealth',
+                        'help',
+                        'man',
+                        'fugitive',
+                        '',
+                    },
                 },
-            },
-            scope = {
-                enabled = true,
-                show_start = false,
-                show_end = false,
-                highlight = { 'Function' },
-            },
-            indent = {
-                tab_char = '│',
-            },
-        },
+                scope = {
+                    enabled = true,
+                    show_start = false,
+                    show_end = false,
+                    highlight = { 'Function' },
+                },
+                indent = {
+                    tab_char = '│',
+                },
+            })
+        end,
     },
     {
         'nvim-lualine/lualine.nvim',

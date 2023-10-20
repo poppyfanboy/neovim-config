@@ -18,9 +18,20 @@ return {
             auto_preview = false,
         },
         keys = {
-            { '<leader>tt', '<cmd>TroubleToggle<cr>', mode = { 'n' }, desc = '[t]oggle [t]rouble' },
+            {
+                '<leader>tt',
+                '<cmd>Trouble workspace_diagnostics<cr>',
+                mode = { 'n' },
+                desc = '[t]oggle [t]rouble',
+            },
+            {
+                '<leader>tx',
+                '<cmd>TroubleClose<cr>',
+                mode = { 'n' },
+                desc = 'Close the trouble window',
+            },
         },
-        cmd = { 'TroubleToggle' },
+        cmd = { 'Trouble', 'TroubleClose' },
     },
     {
         'folke/todo-comments.nvim',
@@ -30,8 +41,8 @@ return {
         },
         config = true,
         keys = {
-            { '<leader>tT', '<cmd>TodoTrouble<cr>', mode = { 'n' }, desc = '[t]oggle [T]ODO list' },
+            { '<leader>tT', '<cmd>Trouble todo<cr>', mode = { 'n' }, desc = '[t]oggle [T]ODO list' },
         },
-        cmd = { 'TodoTrouble' },
+        cmd = { 'Trouble', 'TroubleClose' },
     },
 }

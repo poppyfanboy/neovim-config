@@ -16,6 +16,8 @@ vim.o.langmap = table.concat({
 vim.o.iminsert = 0
 vim.o.imsearch = -1
 
+vim.keymap.set({ 'i' }, 'jk', '<Esc>')
+
 vim.keymap.set({ 'n' }, '<c-l>', function()
     if vim.o.iminsert == 1 then
         vim.o.iminsert = 0
@@ -52,14 +54,16 @@ vim.keymap.set({ 'n' }, '<C-d>', function()
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true)
     )
 end)
-vim.keymap.set({ 'n', 'i' }, '<a-h>', '15zh')
-vim.keymap.set({ 'n', 'i' }, '<a-l>', '15zl')
+vim.keymap.set({ 'n' }, '<a-h>', '15zh')
+vim.keymap.set({ 'n' }, '<a-l>', '15zl')
+vim.keymap.set({ 'i' }, '<a-h>', '<c-o>15zh')
+vim.keymap.set({ 'i' }, '<a-l>', '<c-o>15zl')
 
 vim.keymap.set({ 'n' }, '<leader>co', '<cmd>copen<cr>', {
     desc = 'Open quickfix list ([c][o]pen)',
 })
-vim.keymap.set({ 'n' }, '<leader>cc', '<cmd>cclose<cr>', {
-    desc = 'Close quickfix list ([c][c]lose)',
+vim.keymap.set({ 'n' }, '<leader>cx', '<cmd>cclose<cr>', {
+    desc = 'Close quickfix list',
 })
 vim.keymap.set({ 'n' }, ']q', '<cmd>cnext<cr>', {
     silent = true,
