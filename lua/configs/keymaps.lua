@@ -16,8 +16,6 @@ vim.o.langmap = table.concat({
 vim.o.iminsert = 0
 vim.o.imsearch = -1
 
-vim.keymap.set({ 'i' }, 'jk', '<Esc>')
-
 vim.keymap.set({ 'n' }, '<c-l>', function()
     if vim.o.iminsert == 1 then
         vim.o.iminsert = 0

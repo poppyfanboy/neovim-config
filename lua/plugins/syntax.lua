@@ -1,20 +1,32 @@
+local function disable(language, buffer)
+    return vim.api.nvim_buf_line_count(buffer) > require('util').large_file_lines_count
+end
+
 return {
     {
         'nvim-treesitter/nvim-treesitter',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
-            local function disable(language, buffer)
-                return vim.api.nvim_buf_line_count(buffer) > require('util').large_file_lines_count
-            end
-
             require('nvim-treesitter.configs').setup({
-                ensure_installed = { 'cpp', 'rust', 'json', 'xml', 'lua', 'yaml', 'toml', 'glsl' },
+                ensure_installed = {
+                    'cpp',
+                    'rust',
+                    'json',
+                    'xml',
+                    'lua',
+                    'yaml',
+                    'toml',
+                    'glsl',
+                    'cmake',
+                    'c',
+                },
                 highlight = {
                     enable = true,
                     disable = disable,
                 },
                 matchup = {
                     enable = true,
+                    enable_quotes = true,
                     disable = disable,
                 },
             })
@@ -77,7 +89,10 @@ return {
                         },
                     },
                 },
-                indent = { enable = false },
+                indent = {
+                    enable = true,
+                    disable = disable,
+                },
                 incremental_selection = {
                     enable = true,
                     keymaps = {
@@ -92,6 +107,9 @@ return {
     },
     {
         'andymass/vim-matchup',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
             vim.g.matchup_matchparen_offscreen['method'] = 'status_manual'

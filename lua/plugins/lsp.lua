@@ -1,12 +1,6 @@
 local function on_attach(client, buffer)
     require('lsp-status').on_attach(client)
     require('nvim-navic').attach(client, buffer)
-    require('lsp_signature').on_attach({
-        hint_prefix = '',
-        doc_lines = 0,
-        toggle_key = '<c-j>',
-        toggle_key_flip_floatwin_setting = true,
-    }, buffer)
 
     if client.name == 'rust_analyzer' then
         vim.keymap.set({ 'n' }, '<leader>ha', require('rust-tools').hover_actions.hover_actions, {
@@ -34,10 +28,7 @@ local function on_attach(client, buffer)
     vim.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, {
         buffer = buffer,
     })
-    vim.keymap.set({ 'n' }, '<c-k>', vim.lsp.buf.signature_help, {
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'i' }, '<m-k>', vim.lsp.buf.signature_help, {
+    vim.keymap.set({ 'i', 'n' }, '<c-k>', vim.lsp.buf.signature_help, {
         buffer = buffer,
     })
 
@@ -151,7 +142,7 @@ return {
     },
     {
         'jay-babu/mason-null-ls.nvim',
-        ft = { 'lua' },
+        ft = { 'lua', 'c', 'cpp', 'cmake' },
         dependencies = {
             'williamboman/mason.nvim',
             'nvim-lua/plenary.nvim',
@@ -188,12 +179,8 @@ return {
         event = { 'LspAttach' },
     },
     {
-        'ray-x/lsp_signature.nvim',
-        event = { 'LspAttach' },
-    },
-    {
         'neovim/nvim-lspconfig',
-        ft = { 'lua' },
+        ft = { 'lua', 'c', 'cpp', 'cmake' },
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'williamboman/mason.nvim',

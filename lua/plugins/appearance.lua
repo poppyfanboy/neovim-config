@@ -19,7 +19,8 @@ return {
         'rebelot/kanagawa.nvim',
         config = function()
             require('kanagawa').setup({
-                compile = true,
+                -- this somehow conflicts with markdown highlighting
+                compile = false,
             })
 
             vim.cmd.colorscheme('kanagawa')
@@ -55,7 +56,7 @@ return {
                     highlight = { 'Function' },
                 },
                 indent = {
-                    tab_char = '│',
+                    tab_char = '▎',
                 },
             })
         end,
@@ -258,7 +259,7 @@ return {
                     '　Open configs',
                     [[<cmd>lua vim.cmd.e(vim.fn.stdpath('config')); vim.cmd.norm('`')<cr>]]
                 ),
-                dashboard.button('p', '　Open projects', [[<cmd>e ~/Documents/projects<cr>]]),
+                dashboard.button('p', '　Open projects', [[<cmd>e ~/_/Coding<cr>]]),
                 dashboard.button('l', '󰒲　Lazy', [[<cmd>Lazy<cr>]]),
                 dashboard.button('m', '󰣪　Mason', [[<cmd>Mason<cr>]]),
                 dashboard.button('q', '󰍃　Quit', [[<cmd>qa!<cr>]]),

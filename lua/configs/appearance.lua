@@ -16,7 +16,7 @@ local fillchars = {
     diff = '╱',
 }
 
-vim.o.guifont = 'Iosevka Nerd Font:h14'
+vim.o.guifont = 'Iosevka Nerd Font:h12'
 
 vim.o.list = true
 for listchar_name, listchar_value in pairs(listchars) do

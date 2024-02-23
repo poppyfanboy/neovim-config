@@ -43,6 +43,5 @@ return {
         keys = {
             { '<leader>tT', '<cmd>Trouble todo<cr>', mode = { 'n' }, desc = '[t]oggle [T]ODO list' },
         },
-        cmd = { 'Trouble', 'TroubleClose' },
     },
 }

@@ -131,7 +131,16 @@ return {
                 '<cmd>Telescope live_grep_args<cr>',
                 desc = '[l]ive [g]rep [a]rgs',
             },
-            { '<leader>su', '<cmd>Telescope undo<cr>',      desc = '[s]earch [u]ndo' },
+            {
+                '<leader>su',
+                '<cmd>Telescope undo<cr>',
+                desc = '[s]earch [u]ndo',
+            },
+            {
+                '<leader>st',
+                '<cmd>Telescope treesitter<cr>',
+                desc = '[s]earch [t]reesitter',
+            },
             {
                 '<leader>ds',
                 '<cmd>Telescope lsp_document_symbols<cr>',
