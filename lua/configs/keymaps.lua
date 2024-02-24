@@ -16,6 +16,21 @@ vim.o.langmap = table.concat({
 vim.o.iminsert = 0
 vim.o.imsearch = -1
 
+-- Quit without saving
+vim.keymap.set({ 'n' }, '<leader>qa', '<cmd>qa!<cr>', {
+    desc = '[q]uit [a]ll without saving',
+})
+
+-- Hide highlighted words after searching
+vim.keymap.set({ 'n' }, '<leader>nh', '<cmd>nohlsearch<cr>', {
+    desc = '[n]o [h]ighlight',
+})
+
+-- Tab keymaps
+vim.keymap.set({ 'n' }, '<leader>tn', [[<cmd>tabnew<cr>]], { desc = '[t]ab [n]ew' })
+vim.keymap.set({ 'n' }, '<leader>tc', [[<cmd>tabclose<cr>]], { desc = '[t]ab [c]lose' })
+
+-- Switch between Russian and English keymaps
 vim.keymap.set({ 'n' }, '<c-l>', function()
     if vim.o.iminsert == 1 then
         vim.o.iminsert = 0
@@ -27,19 +42,14 @@ vim.keymap.set({ 'n' }, '<c-l>', function()
 end)
 vim.keymap.set({ 'i', 'c' }, '<c-l>', [[<c-^><cmd>lua require('util').refresh_statusline()<cr>]])
 
-vim.keymap.set({ 'n' }, '<leader>qa', '<cmd>qa!<cr>', {
-    desc = '[q]uit [a]ll without saving',
-})
-vim.keymap.set({ 'n' }, '<leader>nh', '<cmd>nohlsearch<cr>', {
-    desc = '[n]o [h]ighlight',
-})
-
+-- Chooses the first option when correcting a spelling mistake
 vim.keymap.set({ 'n' }, '<leader>z', '1z=')
--- auto-fix the last spelling mistake while typing in insert mode
+
+-- Auto-fix (choose the first option) the last spelling mistake while typing in insert mode
 -- https://stackoverflow.com/a/16481737
 vim.keymap.set({ 'i' }, '<c-f>', '<c-g>u<Esc>[s1z=`]a<c-g>u')
 
-vim.keymap.set({ 'i' }, '<C-z>', '<C-o>zz')
+-- Scroll by 25% of the screen height instead of 50%
 vim.keymap.set({ 'n' }, '<C-u>', function()
     local height = math.floor(vim.fn.winheight(0) / 4)
     vim.cmd(
@@ -52,11 +62,17 @@ vim.keymap.set({ 'n' }, '<C-d>', function()
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true)
     )
 end)
+
+-- Center current line on screen while typing
+vim.keymap.set({ 'i' }, '<C-z>', '<C-o>zz')
+
+-- Move horizontally in normal/insert modes
 vim.keymap.set({ 'n' }, '<a-h>', '15zh')
 vim.keymap.set({ 'n' }, '<a-l>', '15zl')
 vim.keymap.set({ 'i' }, '<a-h>', '<c-o>15zh')
 vim.keymap.set({ 'i' }, '<a-l>', '<c-o>15zl')
 
+-- Quickfix keymaps
 vim.keymap.set({ 'n' }, '<leader>co', '<cmd>copen<cr>', {
     desc = 'Open quickfix list ([c][o]pen)',
 })
@@ -72,6 +88,7 @@ vim.keymap.set({ 'n' }, '[q', '<cmd>cprev<cr>', {
     desc = 'Go to previous quickfix list entry',
 })
 
+-- LSP diagnostics
 vim.keymap.set({ 'n' }, '<leader>dt', function()
     local config = vim.diagnostic.config()
     local diagnostics_enabled = config.signs or config.underline
@@ -85,11 +102,14 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>dp', vim.diagnostic.open_float, { desc = '[d]iagnostic [p]review' })
 
-vim.keymap.set({ 'n' }, '<leader>tn', [[<cmd>tabnew<cr>]], { desc = '[t]ab [n]ew' })
-
+-- Move lines and blocks of code up or down
 vim.keymap.set({ 'v' }, '<a-j>', [[:m '>+1<cr>gv=gv]])
 vim.keymap.set({ 'v' }, '<a-k>', [[:m '<-2<cr>gv=gv]])
 vim.keymap.set({ 'n' }, '<a-j>', [[:m .+1<cr>==]])
 vim.keymap.set({ 'n' }, '<a-k>', [[:m .-2<cr>==]])
 
+-- Join line while keeping the cursor in the same position
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- Go to previous file
 vim.keymap.set({ 'n' }, '\\', '<c-^>')

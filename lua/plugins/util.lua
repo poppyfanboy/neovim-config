@@ -41,7 +41,23 @@ return {
         },
         config = true,
         keys = {
-            { '<leader>tT', '<cmd>Trouble todo<cr>', mode = { 'n' }, desc = '[t]oggle [T]ODO list' },
+            {
+                '<leader>tT',
+                '<cmd>Trouble todo<cr>',
+                mode = { 'n' },
+                desc = '[t]oggle [T]ODO list',
+            },
+        },
+    },
+    {
+        'akinsho/toggleterm.nvim',
+        version = '*',
+        config = {
+            direction = 'float',
+            open_mapping = '<f1>',
+            shell = function()
+                return vim.o.shell
+            end,
         },
     },
 }

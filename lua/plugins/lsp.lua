@@ -37,10 +37,6 @@ local function on_attach(client, buffer)
     end, {
         desc = 'Format current buffer with LSP',
     })
-    vim.keymap.set({ 'n' }, '<leader>ff', [[<cmd>Format<cr>]], {
-        desc = '[f]ile [f]ormat',
-        buffer = buffer,
-    })
 end
 
 return {
@@ -141,25 +137,28 @@ return {
         cmd = { 'Mason' },
     },
     {
-        'jay-babu/mason-null-ls.nvim',
+        'stevearc/conform.nvim',
         ft = { 'lua', 'c', 'cpp', 'cmake' },
-        dependencies = {
-            'williamboman/mason.nvim',
-            'nvim-lua/plenary.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+        event = { 'BufWritePre' },
+        cmd = { 'ConformInfo' },
+        keys = {
+            {
+                '<leader>ff',
+                function()
+                    require('conform').format({ async = true, lsp_fallback = true })
+                end,
+                mode = '',
+                desc = 'Format buffer',
+            },
         },
-        config = function()
-            require('mason-null-ls').setup({
-                ensure_installed = { 'stylua' },
-            })
-
-            local null_ls = require('null-ls')
-            null_ls.setup({
-                sources = {
-                    null_ls.builtins.formatting.stylua,
-                },
-            })
-        end,
+        opts = {
+            formatters_by_ft = {
+                lua = { 'stylua' },
+                c = { 'clang_format' },
+                rust = { 'rustfmt' },
+                cmake = { 'cmake_format' },
+            },
+        },
     },
     {
         'nvim-lua/lsp-status.nvim',

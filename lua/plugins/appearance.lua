@@ -82,6 +82,7 @@ return {
             local lsp_server_icon = {
                 lua_ls = '',
                 rust_analyzer = '',
+                clangd = '🐉',
             }
 
             local function lsp_status_section()
@@ -149,7 +150,7 @@ return {
                     lualine_c = {
                         lsp_status_section,
                     },
-                    lualine_x = { keymap, 'encoding', 'fileformat', 'filetype' },
+                    lualine_x = { keymap, 'encoding', 'fileformat', 'filetype', 'filesize' },
                 },
             })
         end,

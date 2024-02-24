@@ -1,5 +1,6 @@
 local M = {}
 
+-- Used to disable Treesitter for large files (too laggy)
 M.large_file_lines_count = 5000
 
 M.path_separator = '/'
@@ -48,6 +49,15 @@ function M.use_cmd_terminal()
     vim.o.shellpipe = '>'
     vim.o.shellquote = ''
     vim.o.shellxquote = '"'
+end
+
+function M.contains(needle, haystack)
+    for _, v in ipairs(haystack) do
+        if v == needle then
+            return true
+        end
+    end
+    return false
 end
 
 return M

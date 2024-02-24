@@ -1,5 +1,11 @@
+local util = require('util')
+
 local function disable(language, buffer)
-    return vim.api.nvim_buf_line_count(buffer) > require('util').large_file_lines_count
+    return vim.api.nvim_buf_line_count(buffer) > util.large_file_lines_count
+end
+
+local function disable_indent(language, buffer)
+    return disable(language, buffer) or util.contains(language, { 'rust' })
 end
 
 return {
@@ -19,6 +25,8 @@ return {
                     'glsl',
                     'cmake',
                     'c',
+                    'markdown',
+                    'markdown_inline',
                 },
                 highlight = {
                     enable = true,
@@ -91,7 +99,7 @@ return {
                 },
                 indent = {
                     enable = true,
-                    disable = disable,
+                    disable = disable_indent,
                 },
                 incremental_selection = {
                     enable = true,

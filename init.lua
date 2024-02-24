@@ -20,6 +20,26 @@ end
 vim.opt.rtp:prepend(lazypath)
 require('lazy').setup('plugins', {
     change_detection = {
+        -- Annoying
         notify = false,
+    },
+    performance = {
+        rtp = {
+            disabled_plugins = {
+                'gzip',
+                'netrwPlugin',
+                'tarPlugin',
+                'tohtml',
+                'tutor',
+                'zipPlugin',
+
+                -- I use matchup plugin instead
+                'matchit',
+                'matchparen',
+            },
+        },
+    },
+    install = {
+        colorscheme = { 'kanagawa' },
     },
 })
