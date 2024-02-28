@@ -10,7 +10,7 @@ return {
                 enable = false,
             })
 
-            vim.keymap.set({ 'n', 'v' }, '<leader>cc', '<cmd>TSContextToggle<cr>', {
+            vim.keymap.set('n', '<leader>cc', '<cmd>TSContextToggle<cr>', {
                 desc = 'context toggle',
             })
         end,
@@ -71,8 +71,8 @@ return {
             local function keymap()
                 local prefix = '🌐 '
 
-                if vim.o.iminsert > 0 and vim.b.keymap_name ~= nil then
-                    return prefix .. vim.b.keymap_name
+                if vim.o.iminsert > 0 and vim.b['keymap_name'] ~= nil then
+                    return prefix .. vim.b['keymap_name']
                 end
 
                 return prefix .. 'en'
@@ -158,7 +158,9 @@ return {
     {
         'kevinhwang91/nvim-bqf',
         config = function()
+            --- @diagnostic disable-next-line: missing-fields
             require('bqf').setup({
+                --- @diagnostic disable-next-line: missing-fields
                 preview = {
                     winblend = 0,
                     auto_preview = false,

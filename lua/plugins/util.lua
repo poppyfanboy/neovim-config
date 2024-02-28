@@ -52,7 +52,8 @@ return {
     {
         'akinsho/toggleterm.nvim',
         version = '*',
-        config = {
+        event = { 'VeryLazy' },
+        opts = {
             direction = 'float',
             open_mapping = '<f1>',
             shell = function()

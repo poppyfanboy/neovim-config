@@ -80,7 +80,7 @@ return {
             local dapui = require('dapui')
 
             require('mason-nvim-dap').setup({
-                automatic_installation = true,
+                automatic_installation = false,
                 handlers = {},
                 ensure_installed = {
                     'codelldb',
@@ -93,11 +93,11 @@ return {
                     type = 'codelldb',
                     request = 'launch',
                     program = function()
-                        return vim.fn.input(
-                            'Path to executable: ',
-                            vim.fn.getcwd() .. require('util').path_separator,
-                            'file'
-                        )
+                        return vim.fn.input({
+                            propmpt = 'Path to executable: ',
+                            default = vim.fn.getcwd() .. require('util').path_separator,
+                            completion = 'file',
+                        })
                     end,
                     cwd = '${workspaceFolder}',
                     stopOnEntry = false,
@@ -123,7 +123,9 @@ return {
                 },
             }
 
+            --- @diagnostic disable-next-line: missing-fields
             dapui.setup({
+                --- @diagnostic disable-next-line: missing-fields
                 controls = { enabled = false },
                 layouts = {
                     {

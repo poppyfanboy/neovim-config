@@ -46,3 +46,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
         end
     end,
 })
+
+if vim.g.neovide then
+    vim.g.neovide_floating_shadow = false
+end

@@ -39,6 +39,34 @@ local function on_attach(client, buffer)
     })
 end
 
+local lsp_kind_map = {
+    Text = '󰉿 ',
+    Method = '󰊕 ',
+    Function = '󰊕 ',
+    Constructor = '󰊕 ',
+    Field = '󰜢 ',
+    Variable = '󰀫 ',
+    Class = '󰠱 ',
+    Interface = ' ',
+    Module = ' ',
+    Property = '󰜢 ',
+    Unit = '󰑭 ',
+    Value = '󰎠 ',
+    Enum = ' ',
+    Keyword = '󰌋 ',
+    Snippet = ' ',
+    Color = '󰏘 ',
+    File = '󰈙 ',
+    Reference = '󰈇 ',
+    Folder = '󰉋 ',
+    EnumMember = ' ',
+    Constant = '󰏿 ',
+    Struct = '󰙅 ',
+    Event = ' ',
+    Operator = '󰆕 ',
+    TypeParameter = '',
+}
+
 return {
     {
         'hrsh7th/nvim-cmp',
@@ -80,7 +108,7 @@ return {
             require('luasnip.loaders.from_vscode').lazy_load()
 
             cmp.setup({
-                preselect = 'none',
+                preselect = 'None',
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -117,11 +145,15 @@ return {
                     { name = 'luasnip' },
                     { name = 'buffer' },
                 },
+                --- @diagnostic disable-next-line: missing-fields
                 formatting = {
-                    format = function(entry, vim_item)
+                    format = function(_, vim_item)
                         vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
+                        vim_item.menu = ''
+                        vim_item.kind = lsp_kind_map[vim_item.kind]
                         return vim_item
                     end,
+                    fields = { 'kind', 'abbr' },
                 },
                 window = {
                     documentation = {
@@ -138,9 +170,10 @@ return {
     },
     {
         'stevearc/conform.nvim',
-        ft = { 'lua', 'c', 'cpp', 'cmake' },
+        ft = { 'lua', 'c', 'cpp', 'cmake', 'json' },
         event = { 'BufWritePre' },
         cmd = { 'ConformInfo' },
+        dependencies = { 'williamboman/mason.nvim' },
         keys = {
             {
                 '<leader>ff',
@@ -157,6 +190,12 @@ return {
                 c = { 'clang_format' },
                 rust = { 'rustfmt' },
                 cmake = { 'cmake_format' },
+                json = { 'jq' },
+            },
+            formatters = {
+                jq = {
+                    prepend_args = { '--indent', 4, '--monochrome-output' },
+                },
             },
         },
     },
@@ -188,14 +227,6 @@ return {
             'hrsh7th/cmp-nvim-lsp',
         },
         config = function()
-            local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-
-            function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-                opts = opts or {}
-                opts.max_width = 80
-                return orig_util_open_floating_preview(contents, syntax, opts, ...)
-            end
-
             vim.diagnostic.config({
                 virtual_text = false,
                 underline = true,
@@ -209,7 +240,7 @@ return {
                     Lua = {
                         workspace = { checkThirdParty = false },
                         telemetry = { enable = false },
-                        diagnostics = { enable = false },
+                        diagnostics = { enable = true },
                     },
                 },
             }
@@ -261,6 +292,8 @@ return {
                 end
             end
 
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+
             require('rust-tools').setup({
                 dap = {
                     adapter = adapter,
@@ -282,7 +315,7 @@ return {
                         },
                     },
                     -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
-                    root_dir = function(...)
+                    root_dir = function()
                         return vim.loop.cwd()
                     end,
                 },

@@ -16,6 +16,28 @@ vim.o.langmap = table.concat({
 vim.o.iminsert = 0
 vim.o.imsearch = -1
 
+-- Better keymaps for resizing splits
+vim.keymap.set('n', '<Left>', '25<C-w><', {})
+vim.keymap.set('n', '<C-Left>', '8<C-w><', {})
+vim.keymap.set('n', '<Right>', '25<C-w>>', {})
+vim.keymap.set('n', '<C-Right>', '8<C-w>>', {})
+vim.keymap.set('n', '<Up>', '10<C-w>-', {})
+vim.keymap.set('n', '<C-Up>', '4<C-w>-', {})
+vim.keymap.set('n', '<Down>', '10<C-w>+', {})
+vim.keymap.set('n', '<C-Down>', '4<C-w>+', {})
+
+-- I just can't hit <c-y> consistently
+vim.keymap.set('c', '<Right>', '<c-y>', {})
+vim.keymap.set('c', '<Left>', '<c-e>', {})
+
+-- Delete to void register
+vim.keymap.set('v', '<leader>d', '"_d', {})
+vim.keymap.set('v', '<leader>c', '"_c', {})
+vim.keymap.set('n', '<leader>C', '"_C', {})
+
+-- Exit terminal mode more easily
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
 -- Quit without saving
 vim.keymap.set({ 'n' }, '<leader>qa', '<cmd>qa!<cr>', {
     desc = '[q]uit [a]ll without saving',
@@ -49,15 +71,16 @@ vim.keymap.set({ 'n' }, '<leader>z', '1z=')
 -- https://stackoverflow.com/a/16481737
 vim.keymap.set({ 'i' }, '<c-f>', '<c-g>u<Esc>[s1z=`]a<c-g>u')
 
--- Scroll by 25% of the screen height instead of 50%
+-- Scroll by a third of the screen height instead of 50% + keep the cursor in the middle of the
+-- screen
 vim.keymap.set({ 'n' }, '<C-u>', function()
-    local height = math.floor(vim.fn.winheight(0) / 4)
+    local height = math.floor(vim.fn.winheight(0) / 3)
     vim.cmd(
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-y>M', true, true, true)
     )
 end)
 vim.keymap.set({ 'n' }, '<C-d>', function()
-    local height = math.floor(vim.fn.winheight(0) / 4)
+    local height = math.floor(vim.fn.winheight(0) / 3)
     vim.cmd(
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true)
     )

@@ -49,13 +49,15 @@ return {
                     'cmake --build build --config Release',
                     'cmake --install build --prefix build',
                 }, '&&'),
+                cond = function()
+                    return vim.fn.executable('cmake') == 1
+                end,
             },
             'nvim-telescope/telescope-symbols.nvim',
         },
         config = function()
             local telescope = require('telescope')
             local lga_actions = require('telescope-live-grep-args.actions')
-            local telescope_builtin = require('telescope.builtin')
 
             telescope.setup({
                 extensions = {
@@ -91,9 +93,9 @@ return {
                 },
             })
 
-            telescope.load_extension('undo')
-            telescope.load_extension('live_grep_args')
-            telescope.load_extension('fzf')
+            pcall(telescope.load_extension, 'undo')
+            pcall(telescope.load_extension, 'live_grep_args')
+            pcall(telescope.load_extension, 'fzf')
         end,
         keys = {
             {
@@ -125,7 +127,12 @@ return {
             {
                 '<leader>sh',
                 '<cmd>Telescope help_tags<cr>',
-                desc = '[s]earch [g]help',
+                desc = '[s]earch [h]elp',
+            },
+            {
+                '<leader>/',
+                '<cmd>Telescope current_buffer_fuzzy_find<cr>',
+                desc = 'Fuzzy find on the current buffer',
             },
             {
                 '<leader>lga',
@@ -176,7 +183,7 @@ return {
         config = function()
             require('barbar').setup({
                 animation = false,
-                exclude_ft = { 'oil' },
+                exclude_ft = { 'oil', 'qf' },
                 icons = {
                     button = false,
                 },

@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre' }, {
     pattern = binary_files_patterns,
     group = binary_autocmd_group,
     callback = function()
-        vim.b.xxd_binary_file = true
+        vim.b['xxd_binary_file'] = true
 
         vim.bo.binary = true
         vim.wo.spell = false
@@ -22,12 +22,12 @@ vim.api.nvim_create_autocmd({ 'BufReadPost' }, {
     pattern = binary_files_patterns,
     group = binary_autocmd_group,
     callback = function()
-        if not vim.b.xxd_binary_file then
+        if not vim.b['xxd_binary_file'] then
             return
         end
 
         vim.cmd([[ silent %!xxd ]])
-        vim.o.filetype = 'xxd'
+        vim.bo.filetype = 'xxd'
         vim.cmd.redraw()
     end,
 })
@@ -40,7 +40,7 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
             return
         end
 
-        vim.b.xxd_saved_view = vim.fn.winsaveview()
+        vim.b['xxd_saved_view'] = vim.fn.winsaveview()
         vim.cmd([[ silent %!xxd -r ]])
     end,
 })
@@ -55,7 +55,7 @@ vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
 
         vim.cmd([[ silent %!xxd ]])
         vim.bo.modified = false
-        vim.fn.winrestview(vim.b.xxd_saved_view)
+        vim.fn.winrestview(vim.b['xxd_saved_view'])
         vim.cmd.redraw()
     end,
 })

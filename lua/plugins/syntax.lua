@@ -1,6 +1,6 @@
 local util = require('util')
 
-local function disable(language, buffer)
+local function disable(_, buffer)
     return vim.api.nvim_buf_line_count(buffer) > util.large_file_lines_count
 end
 
@@ -13,6 +13,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
         event = { 'BufReadPost', 'BufNewFile' },
         config = function()
+            --- @diagnostic disable-next-line: missing-fields
             require('nvim-treesitter.configs').setup({
                 ensure_installed = {
                     'cpp',
@@ -27,7 +28,9 @@ return {
                     'c',
                     'markdown',
                     'markdown_inline',
+                    'vimdoc',
                 },
+                auto_install = false,
                 highlight = {
                     enable = true,
                     disable = disable,
@@ -47,6 +50,7 @@ return {
         },
         event = 'VeryLazy',
         config = function()
+            --- @diagnostic disable-next-line: missing-fields
             require('nvim-treesitter.configs').setup({
                 textobjects = {
                     select = {
