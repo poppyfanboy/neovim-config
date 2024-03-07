@@ -39,7 +39,6 @@ return {
             'nvim-lua/plenary.nvim',
             'folke/trouble.nvim',
         },
-        config = true,
         keys = {
             {
                 '<leader>tT',
@@ -47,6 +46,9 @@ return {
                 mode = { 'n' },
                 desc = '[t]oggle [T]ODO list',
             },
+        },
+        opts = {
+            signs = false,
         },
     },
     {

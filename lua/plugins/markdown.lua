@@ -7,7 +7,7 @@ return {
     },
     {
         'dkarter/bullets.vim',
-        ft = { 'markdown' },
+        event = 'InsertEnter',
     },
     {
         'godlygeek/tabular',

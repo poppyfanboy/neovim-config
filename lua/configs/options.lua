@@ -42,4 +42,7 @@ vim.o.sidescrolloff = 3
 vim.o.spell = true
 vim.opt.spelllang = { 'en_us', 'ru' }
 
-vim.o.updatetime = 200
+vim.o.updatetime = 250
+vim.o.timeoutlen = 400
+
+vim.o.completeopt = 'menu,menuone,noselect,noinsert'

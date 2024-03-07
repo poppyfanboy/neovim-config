@@ -15,40 +15,13 @@ function M.refresh_statusline()
     end
 end
 
-function M.use_powershell_terminal()
-    vim.o.shell = 'pwsh'
-
-    -- https://github.com/LunarVim/LunarVim/blob/master/utils/installer/config_win.example.lua
-    vim.o.shellcmdflag = table.concat({
-        '-NoLogo',
-        '-NoProfile',
-        '-ExecutionPolicy RemoteSigned',
-        '-Command',
-        table.concat({
-            '[Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;',
-            -- vim does not support ANSI escape codes for !-commands
-            "$PSStyle.OutputRendering='PlainText';",
-        }),
-    }, ' ')
-    vim.o.shellredir = table.concat({
-        '2>&1 | Out-File -Encoding UTF8 %s;',
-        'exit $LastExitCode;',
-    })
-    vim.o.shellpipe = table.concat({
-        '2>&1 | Out-File -Encoding UTF8 %s;',
-        'exit $LastExitCode;',
-    })
-    vim.o.shellquote = ''
-    vim.o.shellxquote = ''
-end
-
-function M.use_cmd_terminal()
-    vim.o.shell = 'cmd.exe'
-    vim.o.shellcmdflag = '/s /c'
-    vim.o.shellredir = '>'
-    vim.o.shellpipe = '>'
-    vim.o.shellquote = ''
-    vim.o.shellxquote = '"'
+--- Barbecue sometimes messes up git diff view
+--- @param shown boolean?
+function M.toggle_winbar(shown)
+    local ok, barbecue_ui = pcall(require, 'barbecue.ui')
+    if ok then
+        barbecue_ui.toggle(shown)
+    end
 end
 
 function M.contains(needle, haystack)

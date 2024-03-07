@@ -17,23 +17,24 @@ vim.o.iminsert = 0
 vim.o.imsearch = -1
 
 -- Better keymaps for resizing splits
-vim.keymap.set('n', '<Left>', '25<C-w><', {})
-vim.keymap.set('n', '<C-Left>', '8<C-w><', {})
-vim.keymap.set('n', '<Right>', '25<C-w>>', {})
-vim.keymap.set('n', '<C-Right>', '8<C-w>>', {})
-vim.keymap.set('n', '<Up>', '10<C-w>-', {})
-vim.keymap.set('n', '<C-Up>', '4<C-w>-', {})
-vim.keymap.set('n', '<Down>', '10<C-w>+', {})
-vim.keymap.set('n', '<C-Down>', '4<C-w>+', {})
+vim.keymap.set('n', '<Left>', '25<C-w><')
+vim.keymap.set('n', '<C-Left>', '8<C-w><')
+vim.keymap.set('n', '<Right>', '25<C-w>>')
+vim.keymap.set('n', '<C-Right>', '8<C-w>>')
+vim.keymap.set('n', '<Up>', '10<C-w>-')
+vim.keymap.set('n', '<C-Up>', '4<C-w>-')
+vim.keymap.set('n', '<Down>', '10<C-w>+')
+vim.keymap.set('n', '<C-Down>', '4<C-w>+')
+vim.keymap.set('n', '<C-w><leader>', '<C-w>|<C-w>_')
 
 -- I just can't hit <c-y> consistently
-vim.keymap.set('c', '<Right>', '<c-y>', {})
-vim.keymap.set('c', '<Left>', '<c-e>', {})
+vim.keymap.set('c', '<Right>', '<c-y>')
+vim.keymap.set('c', '<Left>', '<c-e>')
 
 -- Delete to void register
-vim.keymap.set('v', '<leader>d', '"_d', {})
-vim.keymap.set('v', '<leader>c', '"_c', {})
-vim.keymap.set('n', '<leader>C', '"_C', {})
+vim.keymap.set('v', '<leader>d', '"_d')
+vim.keymap.set('v', '<leader>c', '"_c')
+vim.keymap.set('n', '<leader>C', '"_C')
 
 -- Exit terminal mode more easily
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -51,6 +52,8 @@ vim.keymap.set({ 'n' }, '<leader>nh', '<cmd>nohlsearch<cr>', {
 -- Tab keymaps
 vim.keymap.set({ 'n' }, '<leader>tn', [[<cmd>tabnew<cr>]], { desc = '[t]ab [n]ew' })
 vim.keymap.set({ 'n' }, '<leader>tc', [[<cmd>tabclose<cr>]], { desc = '[t]ab [c]lose' })
+vim.keymap.set({ 'n' }, '[t', [[<cmd>tabprevious<cr>]], { desc = 'Previous tab' })
+vim.keymap.set({ 'n' }, ']t', [[<cmd>tabnext<cr>]], { desc = 'Next tab' })
 
 -- Switch between Russian and English keymaps
 vim.keymap.set({ 'n' }, '<c-l>', function()
@@ -136,3 +139,10 @@ vim.keymap.set('n', 'J', 'mzJ`z')
 
 -- Go to previous file
 vim.keymap.set({ 'n' }, '\\', '<c-^>')
+
+-- Indent multiple times in visual mode more easily
+vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
+
+-- Replace a word under the cursor (dot-repeatable)
+vim.keymap.set('n', '<leader>rw', '*``cgn', { desc = '[r]eplace a [w]ord under the cursor' })

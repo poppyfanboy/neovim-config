@@ -82,9 +82,7 @@ return {
             require('mason-nvim-dap').setup({
                 automatic_installation = false,
                 handlers = {},
-                ensure_installed = {
-                    'codelldb',
-                },
+                ensure_installed = {},
             })
 
             dap.configurations.rust = {

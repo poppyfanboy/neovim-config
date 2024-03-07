@@ -11,23 +11,20 @@ end
 return {
     {
         'nvim-treesitter/nvim-treesitter',
-        event = { 'BufReadPost', 'BufNewFile' },
+        event = { 'LazyFile', 'VeryLazy' },
+        -- https://github.com/LazyVim/LazyVim/blob/78e6405f90eeb76fdf8f1a51f9b8a81d2647a698/lua/lazyvim/plugins/treesitter.lua#L11
+        init = function(plugin)
+            require('lazy.core.loader').add_to_rtp(plugin)
+            require('nvim-treesitter.query_predicates')
+        end,
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter-textobjects',
+        },
         config = function()
             --- @diagnostic disable-next-line: missing-fields
             require('nvim-treesitter.configs').setup({
                 ensure_installed = {
-                    'cpp',
-                    'rust',
-                    'json',
-                    'xml',
                     'lua',
-                    'yaml',
-                    'toml',
-                    'glsl',
-                    'cmake',
-                    'c',
-                    'markdown',
-                    'markdown_inline',
                     'vimdoc',
                 },
                 auto_install = false,
@@ -40,18 +37,6 @@ return {
                     enable_quotes = true,
                     disable = disable,
                 },
-            })
-        end,
-    },
-    {
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
-        },
-        event = 'VeryLazy',
-        config = function()
-            --- @diagnostic disable-next-line: missing-fields
-            require('nvim-treesitter.configs').setup({
                 textobjects = {
                     select = {
                         enable = true,
@@ -119,16 +104,9 @@ return {
     },
     {
         'andymass/vim-matchup',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
-        },
-        event = { 'BufReadPost', 'BufNewFile' },
+        event = 'LazyFile',
         config = function()
             vim.g.matchup_matchparen_offscreen['method'] = 'status_manual'
         end,
-    },
-    {
-        'rust-lang/rust.vim',
-        ft = { 'rust' },
     },
 }

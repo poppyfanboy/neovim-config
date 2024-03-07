@@ -120,25 +120,21 @@ return {
                     ['<c-u>'] = cmp.mapping.scroll_docs(-4),
                     ['<c-d>'] = cmp.mapping.scroll_docs(4),
                     ['<tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_locally_jumpable() then
+                        if luasnip.expand_or_locally_jumpable() then
                             luasnip.expand_or_jump()
                         else
                             fallback()
                         end
                     end, { 'i', 's' }),
                     ['<s-tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.locally_jumpable(-1) then
+                        if luasnip.locally_jumpable(-1) then
                             luasnip.jump(-1)
                         else
                             fallback()
                         end
                     end, { 'i', 's' }),
                     ['<c-s>'] = cmp.mapping.complete({}),
-                    ['<cr>'] = cmp.mapping.confirm({ select = true }),
+                    ['<cr>'] = cmp.mapping.confirm({ select = false }),
                 }),
                 sources = {
                     { name = 'nvim_lsp' },
@@ -160,6 +156,9 @@ return {
                         max_width = 60,
                     },
                 },
+                completion = {
+                    completeopt = 'menu,menuone,noselect,noinsert',
+                },
             })
         end,
     },
@@ -170,8 +169,7 @@ return {
     },
     {
         'stevearc/conform.nvim',
-        ft = { 'lua', 'c', 'cpp', 'cmake', 'json' },
-        event = { 'BufWritePre' },
+        event = 'LazyFile',
         cmd = { 'ConformInfo' },
         dependencies = { 'williamboman/mason.nvim' },
         keys = {
@@ -218,7 +216,7 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        ft = { 'lua', 'c', 'cpp', 'cmake' },
+        event = 'LazyFile',
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
             'williamboman/mason.nvim',
@@ -227,6 +225,15 @@ return {
             'hrsh7th/cmp-nvim-lsp',
         },
         config = function()
+            local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+
+            --- @diagnostic disable-next-line: duplicate-set-field
+            vim.lsp.util.open_floating_preview = function(contents, syntax, opts, ...)
+                opts = opts or {}
+                opts.max_width = 60
+                return orig_util_open_floating_preview(contents, syntax, opts, ...)
+            end
+
             vim.diagnostic.config({
                 virtual_text = false,
                 underline = true,
@@ -267,9 +274,11 @@ return {
             })
         end,
     },
+    -- TODO: Might want to switch to 'mrcjkb/rustaceanvim' in the future, couldn't manage to make it
+    -- work for now unfortunately
     {
         'simrat39/rust-tools.nvim',
-        ft = { 'rust' },
+        event = 'LazyFile',
         config = function()
             local adapter
 

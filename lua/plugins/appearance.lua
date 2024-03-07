@@ -1,19 +1,18 @@
 return {
     {
         'nvim-treesitter/nvim-treesitter-context',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
+        event = 'LazyFile',
+        opts = {
+            enable = false,
         },
-        event = { 'BufReadPost', 'BufNewFile' },
-        config = function()
-            require('treesitter-context').setup({
-                enable = false,
-            })
-
-            vim.keymap.set('n', '<leader>cc', '<cmd>TSContextToggle<cr>', {
+        keys = {
+            {
+                '<leader>cc',
+                '<cmd>TSContextToggle<cr>',
+                mode = { 'n' },
                 desc = 'context toggle',
-            })
-        end,
+            },
+        },
     },
     {
         'rebelot/kanagawa.nvim',
@@ -30,7 +29,7 @@ return {
     },
     {
         'lukas-reineke/indent-blankline.nvim',
-        event = 'VeryLazy',
+        event = 'LazyFile',
         config = function()
             local hooks = require('ibl.hooks')
             hooks.register(hooks.type.SCOPE_ACTIVE, function(buffer)
@@ -141,9 +140,9 @@ return {
                     },
                 },
                 refresh = {
-                    statusline = 200,
-                    tabline = 500,
-                    winbar = 300,
+                    statusline = 1000,
+                    tabline = 1000,
+                    winbar = 1000,
                 },
                 sections = {
                     lualine_a = {},
@@ -157,17 +156,13 @@ return {
     },
     {
         'kevinhwang91/nvim-bqf',
-        config = function()
-            --- @diagnostic disable-next-line: missing-fields
-            require('bqf').setup({
-                --- @diagnostic disable-next-line: missing-fields
-                preview = {
-                    winblend = 0,
-                    auto_preview = false,
-                },
-            })
-        end,
         event = { 'QuickFixCmdPre' },
+        opts = {
+            preview = {
+                winblend = 0,
+                auto_preview = false,
+            },
+        },
     },
     {
         'stevearc/dressing.nvim',
@@ -299,7 +294,7 @@ return {
     },
     {
         'RRethy/vim-illuminate',
-        event = 'VeryLazy',
+        event = 'LazyFile',
         config = function()
             vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'Search' })
             vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'Search' })
