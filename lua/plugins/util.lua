@@ -1,37 +1,7 @@
 return {
     {
         'chrisbra/unicode.vim',
-        cmd = { 'UnicodeTable', 'Digraphs' },
-    },
-    {
-        'tyru/open-browser.vim',
-        keys = {
-            { 'gx', '<Plug>(openbrowser-smart-search)', mode = { 'n', 'v' } },
-        },
-    },
-    {
-        'folke/trouble.nvim',
-        dependencies = {
-            'nvim-tree/nvim-web-devicons',
-        },
-        opts = {
-            auto_preview = false,
-        },
-        keys = {
-            {
-                '<leader>tt',
-                '<cmd>Trouble workspace_diagnostics<cr>',
-                mode = { 'n' },
-                desc = '[t]oggle [t]rouble',
-            },
-            {
-                '<leader>tx',
-                '<cmd>TroubleClose<cr>',
-                mode = { 'n' },
-                desc = 'Close the trouble window',
-            },
-        },
-        cmd = { 'Trouble', 'TroubleClose' },
+        cmd = { 'UnicodeTable', 'Digraphs', 'UnicodeSearch' },
     },
     {
         'folke/todo-comments.nvim',
@@ -42,7 +12,9 @@ return {
         keys = {
             {
                 '<leader>tT',
-                '<cmd>Trouble todo<cr>',
+                function()
+                    require('trouble').open('todo')
+                end,
                 mode = { 'n' },
                 desc = '[t]oggle [T]ODO list',
             },
@@ -53,7 +25,6 @@ return {
     },
     {
         'poppyfanboy/toggleterm.nvim',
-        version = '*',
         opts = {
             direction = 'float',
             open_mapping = '<f1>',
@@ -63,7 +34,7 @@ return {
         },
         cmd = { 'ToggleTerm', 'TermExec' },
         keys = {
-            { '<f1>', '<cmd>ToggleTerm<cr>', mode = { 'n' } },
+            { '<f1>' },
         },
     },
 }

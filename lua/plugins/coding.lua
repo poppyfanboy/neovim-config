@@ -33,30 +33,17 @@ return {
         },
     },
     {
-        'Wansmer/treesj',
-        event = 'LazyFile',
-        opts = {
-            use_default_keymaps = false,
-        },
-        keys = {
-            {
-                '<leader>as',
-                [[<cmd>lua require('treesj').split()<cr>]],
-                desc = '[a]rguments [s]plit (treesj)',
-            },
-            {
-                '<leader>aj',
-                [[<cmd>lua require('treesj').join()<cr>]],
-                desc = '[a]rguments [j]join (treesj)',
-            },
-        },
-    },
-    {
         'folke/flash.nvim',
         event = 'LazyFile',
         opts = {
             modes = {
                 search = { enabled = false },
+                char = {
+                    autohide = true,
+                    highlight = {
+                        backdrop = false,
+                    },
+                },
             },
         },
         keys = {
@@ -68,5 +55,9 @@ return {
                 end,
             },
         },
+    },
+    {
+        'godlygeek/tabular',
+        cmd = { 'Tabularize' },
     },
 }

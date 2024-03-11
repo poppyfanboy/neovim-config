@@ -1,45 +1,18 @@
+local common = require('common')
+
 return {
-    {
-        'nvim-treesitter/nvim-treesitter-context',
-        event = 'LazyFile',
-        opts = {
-            enable = false,
-        },
-        keys = {
-            {
-                '<leader>cc',
-                '<cmd>TSContextToggle<cr>',
-                mode = { 'n' },
-                desc = 'context toggle',
-            },
-        },
-    },
     {
         'rebelot/kanagawa.nvim',
         config = function()
             require('kanagawa').setup({
                 compile = true,
-                -- https://github.com/rebelot/kanagawa.nvim/issues/197
+                colors = {
+                    theme = { all = { diag = { error = '#C34043' } } },
+                },
                 overrides = function(_)
                     return {
-                        ['@string.regexp'] = { link = '@string.regex' },
-                        ['@variable.parameter'] = { link = '@parameter' },
-                        ['@exception'] = { link = '@exception' },
-                        ['@string.special.symbol'] = { link = '@symbol' },
-                        ['@markup.heading'] = { link = '@text.title' },
-                        ['@markup.raw'] = { link = '@text.literal' },
-                        ['@markup.quote'] = { link = '@text.quote' },
-                        ['@markup.math'] = { link = '@text.math' },
-                        ['@markup.environment'] = { link = '@text.environment' },
-                        ['@markup.environment.name'] = { link = '@text.environment.name' },
-                        ['@markup.link.url'] = { link = 'Special' },
-                        ['@markup.link.label'] = { link = 'Identifier' },
-                        ['@comment.note'] = { link = '@text.note' },
-                        ['@comment.warning'] = { link = '@text.warning' },
-                        ['@comment.danger'] = { link = '@text.danger' },
-                        ['@diff.plus'] = { link = '@text.diff.add' },
-                        ['@diff.minus'] = { link = '@text.diff.delete' },
-                        ['@comment.todo'] = { link = '@text.todo' },
+                        ['@markup.raw'] = { link = 'Comment' },
+                        ['@markup.link.label.markdown_inline'] = { link = 'WarningMsg' },
                     }
                 end,
             })
@@ -54,8 +27,8 @@ return {
         event = 'LazyFile',
         config = function()
             local hooks = require('ibl.hooks')
-            hooks.register(hooks.type.SCOPE_ACTIVE, function(buffer)
-                return vim.api.nvim_buf_line_count(buffer) < require('util').large_file_lines_count
+            hooks.register(hooks.type.SCOPE_ACTIVE, function()
+                return not vim.b['too_large_for_treesitter']
             end)
 
             require('ibl').setup({
@@ -68,6 +41,7 @@ return {
                         'man',
                         'fugitive',
                         '',
+                        'nasm',
                     },
                 },
                 scope = {
@@ -87,10 +61,10 @@ return {
         dependencies = {
             'nvim-tree/nvim-web-devicons',
         },
-        event = 'VeryLazy',
+        event = 'LazyFile',
         config = function()
             local function keymap_section()
-                local prefix = '🌐 '
+                local prefix = '🌎 '
 
                 if vim.o.iminsert > 0 and vim.b['keymap_name'] ~= nil then
                     return prefix .. vim.b['keymap_name']
@@ -99,15 +73,15 @@ return {
                 return prefix .. 'en'
             end
 
-            local spinner_symbols = { '◜', '◠', '◝', '◞', '◡', '◟' }
             local lsp_server_icon = {
-                lua_ls = '',
-                rust_analyzer = '',
+                lua_ls = ' ',
+                ['rust-analyzer'] = ' ',
                 clangd = '🐉',
+                hls = ' ',
             }
 
             local function lsp_status_section()
-                if vim.tbl_count(vim.lsp.get_active_clients()) == 0 then
+                if vim.tbl_count(vim.lsp.get_clients()) == 0 then
                     return ''
                 end
 
@@ -129,12 +103,6 @@ return {
                 local contents =
                     string.format('%s %s', last_message.title, last_message.message or '')
 
-                if last_message.spinner ~= nil then
-                    local spinner_symbol =
-                        spinner_symbols[(last_message.spinner % #spinner_symbols) + 1]
-                    contents = string.format('%s %s', spinner_symbol, contents)
-                end
-
                 if lsp_server_icon[last_message.name] ~= nil then
                     contents = string.format('%s %s', lsp_server_icon[last_message.name], contents)
                 else
@@ -144,13 +112,16 @@ return {
                 return string.sub(contents, 1, 40)
             end
 
+            local lualine_require = require('lualine_require')
+            lualine_require.require = require
+
             require('lualine').setup({
                 options = {
                     disabled_filetypes = {
-                        statusline = {
-                            'alpha',
-                        },
+                        statusline = { 'dashboard' },
                     },
+                    section_separators = { left = '', right = '' },
+                    component_separators = { left = '', right = '▕ ' },
                 },
                 refresh = {
                     statusline = 1000,
@@ -160,14 +131,30 @@ return {
                 sections = {
                     lualine_a = {},
                     lualine_c = { lsp_status_section },
-                    lualine_x = { keymap_section, 'encoding', 'fileformat', 'filetype', 'filesize' },
+                    lualine_x = {
+                        { keymap_section, padding = 0 },
+                        { 'filetype', padding = 0 },
+                        { 'encoding', padding = 0 },
+                        {
+                            'fileformat',
+                            padding = 0,
+                            symbols = {
+                                unix = 'unix',
+                                dos = 'dos',
+                                mac = 'mac',
+                            },
+                        },
+                        { 'filesize', padding = 0 },
+                    },
+                    lualine_y = { 'progress' },
+                    lualine_z = { 'location' },
                 },
             })
         end,
     },
     {
         'kevinhwang91/nvim-bqf',
-        event = { 'QuickFixCmdPre' },
+        event = 'QuickFixCmdPre',
         opts = {
             preview = {
                 winblend = 0,
@@ -177,104 +164,219 @@ return {
     },
     {
         'stevearc/dressing.nvim',
+        lazy = true,
         opts = {
             input = {
+                insert_only = false,
+                start_in_insert = false,
                 win_options = {
                     winblend = 0,
+                    winhighlight = table.concat({
+                        'Normal:Normal',
+                        'FloatBorder:TelescopeBorder',
+                        'FloatTitle:TelescopeTitle',
+                    }, ','),
                 },
+                border = 'single',
             },
             select = {
-                nui = {
+                backend = { 'telescope', 'builtin' },
+                builtin = {
                     win_options = {
                         winblend = 0,
+                        winhighlight = 'Normal:Normal',
+                    },
+                    border = 'single',
+                },
+                telescope = {
+                    theme = 'ivy',
+                    sorting_strategy = 'ascending',
+                    layout_strategy = 'center',
+                    layout_config = {
+                        height = 0.4,
+                        width = 0.5,
+                    },
+                    border = true,
+                    borderchars = {
+                        prompt = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
+                        results = { '─', '│', '─', '│', '├', '┤', '┘', '└' },
+                        preview = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
                     },
                 },
             },
         },
-        event = 'VeryLazy',
+        init = function()
+            --- @diagnostic disable-next-line: duplicate-set-field
+            vim.ui.select = function(...)
+                require('lazy').load({ plugins = { 'dressing.nvim' } })
+                return vim.ui.select(...)
+            end
+
+            --- @diagnostic disable-next-line: duplicate-set-field
+            vim.ui.input = function(...)
+                require('lazy').load({ plugins = { 'dressing.nvim' } })
+                return vim.ui.input(...)
+            end
+        end,
     },
     {
-        'goolord/alpha-nvim',
+        'nvimdev/dashboard-nvim',
         event = 'VimEnter',
         config = function()
-            local dashboard = require('alpha.themes.dashboard')
-
-            -- https://www.asciiart.eu
             local headers = {
                 {
+                    '',
                     [[ ()()         ____ ]],
                     [[ (..)        /|o  |]],
                     [[ /\/\       /o|  o|]],
                     [[c\db/o...  /o_|_o_|]],
+                    '',
+                    '',
                 },
                 {
+                    '',
                     [[  __      _]],
                     [[o'')}____//]],
                     [[ `_/      )]],
                     [[ (_(_/-(_/ ]],
+                    [[           ]],
+                    '',
                 },
                 {
+                    '',
                     [[       .                 ]],
                     [[      ":"                ]],
                     [[    ___:____     |"\/"|  ]],
                     [[  ,'        `.    \  /   ]],
                     [[  |  O        \___/  |   ]],
                     [[~^~^~^~^~^~^~^~^~^~^~^~^~]],
+                    [[                         ]],
+                    '',
                 },
                 {
+                    '',
                     [[   ___     ___  ]],
                     [[  (o o)   (o o) ]],
                     [[ (  V  ) (  V  )]],
                     [[/--m-m- /--m-m- ]],
+                    [[                ]],
+                    '',
                 },
                 {
+                    '',
                     [[    |\__/,|   (`\ ]],
                     [[  _.|o o  |_   ) )]],
                     [[-(((---(((--------]],
+                    [[                  ]],
+                    '',
                 },
                 {
+                    '',
                     [[\|/          (__)     ]],
                     [[     `\------(oo)     ]],
                     [[       ||    (__)     ]],
                     [[       ||w--||     \|/]],
                     [[   \|/                ]],
+                    [[                      ]],
+                    '',
                 },
                 {
+                    '',
                     [[    .----.   @   @]],
                     [[   / .-"-.`.  \v/ ]],
                     [[   | | '\ \ \_/ ) ]],
                     [[ ,-\ `-.' /.'  /  ]],
                     [['---`----'----'   ]],
+                    [[                  ]],
+                    '',
+                },
+                {
+                    '',
+                    [[   ╱|、     ]],
+                    [[ (˚ˎ 。7    ]],
+                    [[  |、˜〵    ]],
+                    [[  じしˍ,)ノ ]],
+                    [[            ]],
+                    '',
                 },
             }
 
-            dashboard.section.header.val = headers[math.random(1, #headers)]
+            vim.cmd.highlight({ 'link', 'DashboardHeader', 'DashboardFooter', bang = true })
 
             local version = vim.version()
-            dashboard.section.footer.val = {
-                '',
-                string.format('Neovim v%s.%s.%s', version.major, version.minor, version.patch),
-            }
-            dashboard.section.footer.opts.position = 'center'
 
-            dashboard.section.buttons.opts.spacing = 0
-            dashboard.section.buttons.val = {
-                dashboard.button(
-                    'c',
-                    '　Open configs',
-                    [[<cmd>lua vim.cmd.e(vim.fn.stdpath('config')); vim.cmd.norm('`')<cr>]]
-                ),
-                dashboard.button('p', '　Open projects', [[<cmd>e ~/_/Coding<cr>]]),
-                dashboard.button('l', '󰒲　Lazy', [[<cmd>Lazy<cr>]]),
-                dashboard.button('m', '󰣪　Mason', [[<cmd>Mason<cr>]]),
-                dashboard.button('q', '󰍃　Quit', [[<cmd>qa!<cr>]]),
-            }
+            require('dashboard').setup({
+                theme = 'doom',
+                hide = {
+                    winbar = false,
+                    statusline = true,
+                    tabline = false,
+                },
+                config = {
+                    header = headers[math.random(1, #headers)],
+                    center = {
+                        {
+                            icon = '  ',
+                            desc = 'Open configs            ',
+                            key = 'c',
+                            action = function()
+                                local config_dir = vim.fn.stdpath('config')
+                                if type(config_dir) == 'table' then
+                                    config_dir = config_dir[0]
+                                end
 
-            require('alpha').setup(dashboard.opts)
+                                vim.loop.chdir(config_dir)
+                                require('oil').open(config_dir)
+                            end,
+                        },
+                        {
+                            icon = '  ',
+                            desc = 'Open projects',
+                            key = 'p',
+                            action = function()
+                                local projects_dir = '~/_/Coding/'
+                                vim.loop.chdir(projects_dir)
+                                require('oil').open(projects_dir)
+                            end,
+                        },
+                        {
+                            icon = '󰒲  ',
+                            desc = 'Lazy',
+                            key = 'l',
+                            action = function()
+                                require('lazy').home()
+                            end,
+                        },
+                        {
+                            icon = '󰣪  ',
+                            desc = 'Mason',
+                            key = 'm',
+                            action = function()
+                                require('mason.ui').open()
+                            end,
+                        },
+                        {
+                            icon = '󰍃  ',
+                            desc = 'Quit',
+                            key = 'q',
+                            action = function()
+                                vim.cmd.qa({ bang = true })
+                            end,
+                        },
+                    },
+                    footer = {
+                        '',
+                        string.format(
+                            'Neovim v%s.%s.%s',
+                            version.major,
+                            version.minor,
+                            version.patch
+                        ),
+                    },
+                },
+            })
         end,
     },
-    -- NOTE: Maybe switch to this https://github.com/Bekaboo/dropbar.nvim once Neovim 0.10 gets
-    -- released?
     {
         'utilyre/barbecue.nvim',
         version = '*',
@@ -287,6 +389,10 @@ return {
             require('barbecue').setup({
                 create_autocmd = false,
                 exclude_filetypes = { 'oil' },
+                -- https://github.com/neovide/neovide/issues/2291#issuecomment-1987399767
+                lead_custom_section = function()
+                    return { { ' ', 'WinBar' } }
+                end,
             })
 
             vim.api.nvim_create_autocmd({
@@ -312,8 +418,57 @@ return {
 
             require('illuminate').configure({
                 delay = 750,
-                large_file_cutoff = require('util').large_file_lines_count,
+                large_file_cutoff = common.too_many_lines,
+                filetypes_denylist = { 'fugitive', 'qf' },
             })
         end,
+    },
+    {
+        'luukvbaal/statuscol.nvim',
+        branch = '0.10',
+        event = 'LazyFile',
+        config = function()
+            local builtin = require('statuscol.builtin')
+
+            require('statuscol').setup({
+                ft_ignore = { 'oil' },
+                segments = {
+                    {
+                        sign = {
+                            namespace = { 'gitsign' },
+                            maxwidth = 1,
+                            colwidth = 1,
+                            auto = false,
+                        },
+                    },
+                    {
+                        sign = {
+                            namespace = { '/*diagnostic/signs' },
+                            maxwidth = 1,
+                            colwidth = 2,
+                            auto = false,
+                        },
+                    },
+                    {
+                        sign = {
+                            name = { 'DapBreakpoint', 'DapStopped' },
+                            maxwidth = 1,
+                            colwidth = 2,
+                            auto = true,
+                        },
+                    },
+                    {
+                        text = { builtin.lnumfunc, ' ' },
+                    },
+                },
+            })
+        end,
+    },
+    {
+        -- try out echasnovski/mini.hipatterns instead?
+        'brenoprata10/nvim-highlight-colors',
+        cond = false,
+        event = 'LazyFile',
+        config = true,
     },
 }

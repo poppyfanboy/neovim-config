@@ -1,10 +1,12 @@
 return {
     {
         'stevearc/oil.nvim',
-        lazy = false,
+        event = 'VeryLazy',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         config = function()
-            require('oil').setup({
+            local oil = require('oil')
+
+            oil.setup({
                 view_options = {
                     show_hidden = true,
                     natural_order = false,
@@ -15,7 +17,7 @@ return {
                 skip_confirm_for_simple_edits = true,
             })
 
-            vim.keymap.set({ 'n' }, '<leader>e', '<cmd>Oil<cr>', {
+            vim.keymap.set('n', '<leader>e', oil.open, {
                 desc = 'File [e]xplorer (oil.nvim)',
             })
         end,
@@ -26,16 +28,13 @@ return {
             require('mini.files').setup()
         end,
         keys = {
-            { '<leader>o', '<cmd>lua MiniFiles.open()<cr>', mode = { 'n' } },
-        },
-    },
-    {
-        't9md/vim-choosewin',
-        init = function()
-            vim.g.choosewin_blink_on_land = false
-        end,
-        keys = {
-            { '<leader>ss', '<cmd>ChooseWin<cr>', mode = { 'n' }, desc = { '[s]elect [s]plit' } },
+            {
+                '<leader>o',
+                function()
+                    require('mini.files').open()
+                end,
+                mode = 'n',
+            },
         },
     },
     {
@@ -87,10 +86,14 @@ return {
                     },
                 },
                 defaults = {
+                    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
                     mappings = {
                         i = {
-                            ['<c-l>'] = { '<c-^>', type = 'command' },
+                            ['<C-l>'] = { '<C-^>', type = 'command' },
                         },
+                    },
+                    preview = {
+                        treesitter = false,
                     },
                 },
             })
@@ -102,76 +105,111 @@ return {
         keys = {
             {
                 '<leader>sf',
-                '<cmd>Telescope find_files<cr>',
+                function()
+                    require('telescope.builtin').find_files()
+                end,
                 desc = '[s]earch [f]iles',
             },
             {
                 '<leader>sb',
-                '<cmd>Telescope buffers<cr>',
+                function()
+                    require('telescope.builtin').buffers()
+                end,
                 desc = '[s]earch [b]uffers',
             },
             {
                 '<leader>sc',
-                '<cmd>Telescope command_history<cr>',
+                function()
+                    require('telescope.builtin').command_history()
+                end,
                 desc = '[s]earch [c]ommand history',
             },
-            { '<leader>sg', '<cmd>Telescope live_grep<cr>', desc = '[s]earch [g]rep' },
+            {
+                '<leader>sg',
+                function()
+                    require('telescope.builtin').live_grep()
+                end,
+                desc = '[s]earch [g]rep',
+            },
             {
                 '<leader>sm',
-                '<cmd>Telescope marks<cr>',
+                function()
+                    require('telescope.builtin').marks()
+                end,
                 desc = '[s]earch [m]arks',
             },
             {
                 '<leader>sj',
-                '<cmd>Telescope jumplist<cr>',
+                function()
+                    require('telescope.builtin').jumplist()
+                end,
                 desc = '[s]earch [j]umplist',
             },
             {
                 '<leader>sh',
-                '<cmd>Telescope help_tags<cr>',
+                function()
+                    require('telescope.builtin').help_tags()
+                end,
                 desc = '[s]earch [h]elp',
             },
             {
                 '<leader>/',
-                '<cmd>Telescope current_buffer_fuzzy_find<cr>',
+                function()
+                    require('telescope.builtin').current_buffer_fuzzy_find()
+                end,
                 desc = 'Fuzzy find on the current buffer',
             },
             {
                 '<leader>lga',
-                '<cmd>Telescope live_grep_args<cr>',
+                function()
+                    require('telescope').extensions.live_grep_args.live_grep_args()
+                end,
                 desc = '[l]ive [g]rep [a]rgs',
             },
             {
                 '<leader>su',
-                '<cmd>Telescope undo<cr>',
+                function()
+                    require('telescope').extensions.undo.undo()
+                end,
                 desc = '[s]earch [u]ndo',
             },
             {
                 '<leader>st',
-                '<cmd>Telescope treesitter<cr>',
+                function()
+                    require('telescope.builtin').treesitter()
+                end,
                 desc = '[s]earch [t]reesitter',
             },
             {
                 '<leader>ds',
-                '<cmd>Telescope lsp_document_symbols<cr>',
+                function()
+                    require('telescope.builtin').lsp_document_symbols()
+                end,
                 desc = '[d]ocument [s]ymbols',
             },
             {
                 '<leader>ws',
-                '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>',
+                function()
+                    require('telescope.builtin').lsp_dynamic_workspace_symbols()
+                end,
                 desc = '[w]orkspace [s]ymbols',
             },
             {
                 'gr',
-                '<cmd>Telescope lsp_references<cr>',
+                function()
+                    require('telescope.builtin').lsp_references()
+                end,
                 desc = 'Show references (LSP)',
             },
             {
                 'gI',
-                '<cmd>Telescope lsp_implementations<cr>',
+                function()
+                    require('telescope.builtin').lsp_implementations()
+                end,
                 desc = 'Show implementations (LSP)',
             },
         },
+        cmd = { 'Telescope' },
     },
     {
         'romgrk/barbar.nvim',
@@ -181,40 +219,55 @@ return {
         init = function()
             vim.g.barbar_auto_setup = false
         end,
-        event = 'VeryLazy',
+        event = 'LazyFile',
         config = function()
             require('barbar').setup({
                 animation = false,
-                exclude_ft = { 'oil', 'qf' },
+                exclude_ft = { 'oil', 'qf', 'fugitive' },
                 exclude_name = { 'UnicodeTable.txt' },
                 icons = {
                     button = false,
+                    separator_at_end = false,
                 },
+                highlight_alternate = true,
             })
 
-            vim.keymap.set({ 'n' }, '<leader>bp', '<cmd>BufferPick<cr>', {
-                desc = '[b]uffer [p]ick',
-            })
-            vim.keymap.set({ 'n' }, '[b', '<cmd>BufferPrevious<cr>', {
-                desc = 'Go to previous buffer',
-            })
-            vim.keymap.set({ 'n' }, ']b', '<cmd>BufferNext<cr>', {
-                desc = 'Go to next buffer',
-            })
+            local barbar = require('barbar.api')
 
-            vim.keymap.set({ 'n' }, '<leader>X', '<cmd>BufferCloseAllButCurrent<cr>', {
-                desc = 'Close all buffers but current',
-            })
-            vim.keymap.set({ 'n' }, '<leader>x', '<cmd>BufferClose!<cr>', {
-                desc = 'Close current buffer',
-            })
+            vim.keymap.set('n', '<leader>bp', barbar.pick_buffer, { desc = '[b]uffer [p]ick' })
+
+            vim.keymap.set('n', '[b', function()
+                barbar.goto_buffer_relative(-1)
+            end, { desc = 'Go to previous buffer' })
+
+            vim.keymap.set('n', ']b', function()
+                barbar.goto_buffer_relative(1)
+            end, { desc = 'Go to next buffer' })
+
+            vim.keymap.set(
+                'n',
+                '<leader>X',
+                barbar.close_all_but_current,
+                { desc = 'Close all buffers but current' }
+            )
+
+            vim.keymap.set('n', '<leader>x', function()
+                vim.cmd({ cmd = 'BufferClose', bang = true })
+            end, { desc = 'Close current buffer' })
+
+            vim.keymap.set(
+                'n',
+                '<leader>bch',
+                barbar.close_buffers_left,
+                { desc = 'Close all buffers to the left' }
+            )
+
+            vim.keymap.set(
+                'n',
+                '<leader>bcl',
+                barbar.close_buffers_right,
+                { desc = 'Close all buffers to the right' }
+            )
         end,
-    },
-    {
-        'dyng/ctrlsf.vim',
-        init = function()
-            vim.g.ctrlsf_populate_qflist = true
-        end,
-        cmd = { 'CtrlSF' },
     },
 }

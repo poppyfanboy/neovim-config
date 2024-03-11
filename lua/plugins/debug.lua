@@ -1,3 +1,5 @@
+local common = require('common')
+
 return {
     {
         'sakhnik/nvim-gdb',
@@ -9,6 +11,7 @@ return {
             'rcarriga/nvim-dap-ui',
             'williamboman/mason.nvim',
             'jay-babu/mason-nvim-dap.nvim',
+            'nvim-neotest/nvim-nio',
         },
         keys = {
             {
@@ -93,7 +96,7 @@ return {
                     program = function()
                         return vim.fn.input({
                             propmpt = 'Path to executable: ',
-                            default = vim.fn.getcwd() .. require('util').path_separator,
+                            default = vim.fn.getcwd() .. common.path_separator,
                             completion = 'file',
                         })
                     end,

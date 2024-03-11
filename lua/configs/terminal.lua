@@ -72,11 +72,12 @@ if vim.fn.has('win32') == 1 then
             vim.o.shell = 'wsl.exe bash'
             set_bash_shell_options()
         end, {})
+
+        -- From time to time I accidentally type :W instead of :w and since there is no other
+        -- command in vim starting with the capital W other than :WSL, my shell gets changed to WSL
+        -- all the time. So, bind :W to something else instead.
+        vim.api.nvim_create_user_command('W', function()
+            vim.cmd.wa()
+        end, {})
     end
 end
-
-vim.api.nvim_create_autocmd({ 'TermOpen' }, {
-    callback = function()
-        vim.wo.spell = false
-    end,
-})

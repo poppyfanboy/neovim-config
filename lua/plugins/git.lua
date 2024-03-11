@@ -1,3 +1,5 @@
+local common = require('common')
+
 return {
     {
         'lewis6991/gitsigns.nvim',
@@ -11,12 +13,15 @@ return {
                     vim.api.nvim_win_close(diff_window_id, true)
                     diff_window_id = nil
                 end
-                require('util').toggle_winbar(true)
+                common.toggle_winbar(true)
             end, {
                 desc = 'Close the diff of the current file',
             })
 
             require('gitsigns').setup({
+                preview_config = {
+                    border = 'none',
+                },
                 on_attach = function(buffer)
                     local gitsigns = package.loaded.gitsigns
 
@@ -79,7 +84,7 @@ return {
                         desc = '[h]unk [p]review',
                     })
                     vim.keymap.set('n', '<leader>hd', function()
-                        require('util').toggle_winbar(false)
+                        common.toggle_winbar(false)
                         gitsigns.diffthis()
                         vim.cmd.wincmd('p')
                         diff_window_id = vim.fn.win_getid()
@@ -100,7 +105,14 @@ return {
         'tpope/vim-fugitive',
         cmd = { 'Git' },
         keys = {
-            { '<leader>g', [[<cmd>Git<cr>]], mode = { 'n' }, desc = 'open [g]it (fugitive)' },
+            {
+                '<leader>g',
+                function()
+                    vim.cmd('Git')
+                end,
+                mode = 'n',
+                desc = 'open [g]it (fugitive)',
+            },
         },
     },
     {
@@ -110,28 +122,28 @@ return {
             {
                 '<leader>dvo',
                 function()
-                    require('util').toggle_winbar(false)
+                    common.toggle_winbar(false)
                     vim.cmd('DiffviewOpen')
                 end,
-                mode = { 'n' },
+                mode = 'n',
                 desc = '[d]iff [v]iew [o]pen',
             },
             {
                 '<leader>dvc',
                 function()
                     vim.cmd('DiffviewClose')
-                    require('util').toggle_winbar(true)
+                    common.toggle_winbar(true)
                 end,
-                mode = { 'n' },
+                mode = 'n',
                 desc = '[d]iff [v]iew [c]lose',
             },
             {
                 '<leader>dvf',
                 function()
-                    require('util').toggle_winbar(false)
+                    common.toggle_winbar(false)
                     vim.cmd('DiffviewFileHistory %')
                 end,
-                mode = { 'n' },
+                mode = 'n',
                 desc = '[d]iff [v]iew [f]ile history',
             },
         },

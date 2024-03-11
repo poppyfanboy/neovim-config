@@ -2,6 +2,9 @@ if vim.loader ~= nil then
     vim.loader.enable()
 end
 
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
 math.randomseed(os.time())
 
 require('configs')
@@ -18,6 +21,8 @@ if not vim.loop.fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(lazypath)
+
+local lazy = require('lazy')
 
 -- Add a custom event that fires after the UI is loaded when opening a file from the CLI like this:
 -- `nvim file`.
@@ -79,7 +84,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile', 'BufWritePre' }, {
     end,
 })
 
-require('lazy').setup('plugins', {
+lazy.setup('plugins', {
     change_detection = {
         -- Annoying
         notify = false,
@@ -101,6 +106,9 @@ require('lazy').setup('plugins', {
         },
     },
     install = {
-        colorscheme = { 'kanagawa', 'habamax' },
+        colorscheme = { 'kanagawa', 'default', 'habamax' },
+    },
+    ui = {
+        backdrop = 100,
     },
 })

@@ -1,6 +1,4 @@
 require('configs.options')
 require('configs.terminal')
 require('configs.keymaps')
-require('configs.xxd')
-require('configs.appearance')
-require('configs.coding')
+require('configs.autocmd')

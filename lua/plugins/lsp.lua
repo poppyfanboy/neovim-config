@@ -1,42 +1,132 @@
+local common = require('common')
+
 local function on_attach(client, buffer)
     require('lsp-status').on_attach(client)
-    require('nvim-navic').attach(client, buffer)
 
-    if client.name == 'rust_analyzer' then
-        vim.keymap.set({ 'n' }, '<leader>ha', require('rust-tools').hover_actions.hover_actions, {
+    if client.name == 'rust-analyzer' then
+        vim.keymap.set('n', '<leader>rr', function()
+            vim.cmd.RustLsp('run')
+        end, {
+            desc = '[r]ust [r]un',
+            buffer = buffer,
+        })
+
+        vim.keymap.set('n', '<leader>ru', function()
+            vim.cmd.RustLsp('runnables')
+        end, {
+            desc = '[r]ust r[u]unnables',
+            buffer = buffer,
+        })
+
+        vim.keymap.set('n', '<leader>rd', function()
+            vim.cmd.RustLsp('debug')
+        end, {
+            desc = '[r]ust [d]ebug',
+            buffer = buffer,
+        })
+
+        vim.keymap.set('n', '<leader>ha', function()
+            vim.cmd.RustLsp({ 'hover', 'actions' })
+        end, {
             desc = '[h]over [a]ctions',
             buffer = buffer,
         })
     end
 
-    vim.keymap.set({ 'n' }, '<leader>rn', vim.lsp.buf.rename, {
-        desc = '[r]e[n]ame',
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'n' }, '<leader>ca', vim.lsp.buf.code_action, {
-        desc = '[c]ode [a]ction',
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'n' }, 'gd', vim.lsp.buf.definition, {
-        desc = '[g]o to [d]efinition',
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'n' }, 'gD', vim.lsp.buf.declaration, {
-        desc = '[g]o to [D]eclaration',
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, {
-        buffer = buffer,
-    })
-    vim.keymap.set({ 'i', 'n' }, '<c-j>', vim.lsp.buf.signature_help, {
-        buffer = buffer,
-    })
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_documentSymbol)
+        or client.server_capabilities.documentSymbolProvider
+    then
+        require('nvim-navic').attach(client, buffer)
+    end
 
-    vim.api.nvim_buf_create_user_command(buffer, 'Format', function(_)
-        vim.lsp.buf.format()
-    end, {
-        desc = 'Format current buffer with LSP',
-    })
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_rename)
+        or client.server_capabilities.renameProvider
+    then
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {
+            desc = '[r]e[n]ame',
+            buffer = buffer,
+        })
+    end
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_codeAction)
+        or client.server_capabilities.codeActionProvider
+    then
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {
+            desc = '[c]ode [a]ction',
+            buffer = buffer,
+        })
+    end
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_definition)
+        or client.server_capabilities.definitionProvider
+    then
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {
+            desc = '[g]o to [d]efinition',
+            buffer = buffer,
+        })
+    end
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_declaration)
+        or client.server_capabilities.declarationProvider
+    then
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {
+            desc = '[g]o to [D]eclaration',
+            buffer = buffer,
+        })
+    end
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint)
+        or client.server_capabilities.inlayHintProvider
+    then
+        vim.keymap.set('n', '<leader>i', function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
+        end, {
+            desc = '[i]nlay hints toggle',
+            buffer = buffer,
+        })
+    end
+
+    local lsp_ui = require('lsp_ui')
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_hover)
+        or client.server_capabilities.hoverProvider
+    then
+        vim.keymap.set('n', 'K', function()
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(
+                0,
+                vim.lsp.protocol.Methods.textDocument_hover,
+                params,
+                lsp_ui.hover
+            )
+        end, {
+            buffer = buffer,
+        })
+    end
+
+    if
+        client.supports_method(vim.lsp.protocol.Methods.textDocument_signatureHelp)
+        or client.server_capabilities.signatureHelpProvider
+    then
+        vim.keymap.set({ 'i', 'n' }, '<c-j>', function()
+            local params = vim.lsp.util.make_position_params()
+            vim.lsp.buf_request(
+                0,
+                vim.lsp.protocol.Methods.textDocument_signatureHelp,
+                params,
+                lsp_ui.signature_help
+            )
+        end, {
+            buffer = buffer,
+        })
+    end
 end
 
 local lsp_kind_map = {
@@ -71,12 +161,14 @@ return {
     {
         'hrsh7th/nvim-cmp',
         dependencies = {
-            'L3MON4D3/LuaSnip',
-            'saadparwaiz1/cmp_luasnip',
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
-            'rafamadriz/friendly-snippets',
             'hrsh7th/cmp-path',
+
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
+            'rafamadriz/friendly-snippets',
+
             {
                 'windwp/nvim-autopairs',
                 event = 'InsertEnter',
@@ -111,7 +203,7 @@ return {
                     },
                 },
             })
-            vim.keymap.set({ 'n' }, '<leader>sa', function()
+            vim.keymap.set('n', '<leader>sa', function()
                 luasnip.unlink_current()
             end, {
                 desc = '[s]nippet [a]bort',
@@ -127,8 +219,12 @@ return {
                     end,
                 },
                 mapping = cmp.mapping.preset.insert({
-                    ['<c-n>'] = cmp.mapping.select_next_item(),
-                    ['<c-p>'] = cmp.mapping.select_prev_item(),
+                    ['<c-n>'] = cmp.mapping.select_next_item({
+                        behavior = cmp.SelectBehavior.Insert,
+                    }),
+                    ['<c-p>'] = cmp.mapping.select_prev_item({
+                        behavior = cmp.SelectBehavior.Insert,
+                    }),
                     ['<c-u>'] = cmp.mapping.scroll_docs(-4),
                     ['<c-d>'] = cmp.mapping.scroll_docs(4),
                     ['<tab>'] = cmp.mapping(function(fallback)
@@ -146,7 +242,10 @@ return {
                         end
                     end, { 'i', 's' }),
                     ['<c-s>'] = cmp.mapping.complete({}),
-                    ['<cr>'] = cmp.mapping.confirm({ select = false }),
+                    ['<cr>'] = cmp.mapping.confirm({
+                        select = true,
+                        behavior = cmp.ConfirmBehavior.Replace,
+                    }),
                 }),
                 sources = {
                     { name = 'nvim_lsp' },
@@ -154,8 +253,28 @@ return {
                     {
                         name = 'buffer',
                         option = {
+                            indexing_interval = 1000,
                             get_bufnrs = function()
-                                return vim.api.nvim_list_bufs()
+                                local buffers = vim.api.nvim_list_bufs()
+
+                                local large_buffer_found = false
+                                for _, buffer in ipairs(buffers) do
+                                    local buffer_size = vim.api.nvim_buf_get_offset(
+                                        buffer,
+                                        vim.api.nvim_buf_line_count(buffer)
+                                    )
+
+                                    if buffer_size > common.way_too_large then
+                                        large_buffer_found = true
+                                        break
+                                    end
+                                end
+
+                                if large_buffer_found then
+                                    return {}
+                                else
+                                    return buffers
+                                end
                             end,
                         },
                     },
@@ -185,7 +304,7 @@ return {
     {
         'williamboman/mason.nvim',
         config = true,
-        cmd = { 'Mason' },
+        cmd = { 'Mason', 'MasonInstall' },
     },
     {
         'stevearc/conform.nvim',
@@ -198,7 +317,7 @@ return {
                 function()
                     require('conform').format({ async = true, lsp_fallback = true })
                 end,
-                mode = '',
+                mode = { 'n', 'v' },
                 desc = 'Format buffer',
             },
         },
@@ -209,6 +328,9 @@ return {
                 rust = { 'rustfmt' },
                 cmake = { 'cmake_format' },
                 json = { 'jq' },
+                typescript = { 'prettierd' },
+                html = { 'prettierd' },
+                javascript = { 'prettierd' },
             },
             formatters = {
                 jq = {
@@ -219,7 +341,7 @@ return {
     },
     {
         'nvim-lua/lsp-status.nvim',
-        event = { 'LspAttach' },
+        event = 'LspAttach',
         config = function()
             local lsp_status = require('lsp-status')
             lsp_status.config({
@@ -245,6 +367,8 @@ return {
             'hrsh7th/cmp-nvim-lsp',
         },
         config = function()
+            vim.lsp.set_log_level('OFF')
+
             local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
 
             --- @diagnostic disable-next-line: duplicate-set-field
@@ -257,7 +381,8 @@ return {
             vim.diagnostic.config({
                 virtual_text = false,
                 underline = true,
-                signs = true,
+                severity_sort = true,
+                signs = common.diagnostic_signs,
             })
 
             require('neodev').setup()
@@ -265,21 +390,32 @@ return {
             local servers = {
                 lua_ls = {
                     Lua = {
+                        hint = { enable = true },
                         workspace = { checkThirdParty = false },
-                        telemetry = { enable = false },
-                        diagnostics = { enable = true },
+                        codeLens = { enable = false },
+                        completion = { callSnippet = 'Replace' },
+                    },
+                },
+                clangd = {
+                    cmd = {
+                        'clangd',
+                        '--background-index',
+                        '--clang-tidy',
+                        '--header-insertion=never',
+                        '--completion-style=detailed',
+                        '--function-arg-placeholders=true',
+                        '--fallback-style=llvm',
                     },
                 },
             }
 
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
             capabilities =
-                vim.tbl_extend('keep', capabilities or {}, require('lsp-status').capabilities)
+                vim.tbl_deep_extend('keep', capabilities, require('lsp-status').capabilities)
 
             local mason_lspconfig = require('mason-lspconfig')
             mason_lspconfig.setup({
-                ensure_installed = vim.tbl_keys(servers),
+                ensure_installed = {},
             })
             mason_lspconfig.setup_handlers({
                 function(server_name)
@@ -288,81 +424,128 @@ return {
                         on_attach = on_attach,
                         settings = servers[server_name],
                         filetypes = (servers[server_name] or {}).filetypes,
+                        cmd = (servers[server_name] or {}).cmd,
                     })
                 end,
                 rust_analyzer = function() end,
             })
         end,
     },
-    -- TODO: Might want to switch to 'mrcjkb/rustaceanvim' in the future, couldn't manage to make it
-    -- work for now unfortunately
+    -- This plugin requires rust-analyzer to be added like this: `rustup component add
+    -- rust-analyzer`. It does not use the rust-analyzer installed by Mason.
     {
-        'simrat39/rust-tools.nvim',
+        'mrcjkb/rustaceanvim',
         event = 'LazyFile',
-        config = function()
-            local adapter
-
-            local ok, mason_registry = pcall(require, 'mason-registry')
-            if ok then
-                local codelldb = mason_registry.get_package('codelldb')
-                local extension_path = codelldb:get_install_path() .. '/extension/'
+        init = function()
+            vim.g.rustaceanvim = function()
+                -- https://github.com/mrcjkb/rustaceanvim?tab=readme-ov-file#using-codelldb-for-debugging
+                local extension_path = vim.env.HOME
+                    .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
                 local codelldb_path = extension_path .. 'adapter/codelldb'
-                local liblldb_path = ''
+                local liblldb_path = extension_path .. 'lldb/lib/liblldb'
+                local this_os = vim.uv.os_uname().sysname
 
-                if vim.fn.has('win32') then
+                if this_os:find('Windows') then
+                    codelldb_path = extension_path .. 'adapter\\codelldb.exe'
                     liblldb_path = extension_path .. 'lldb\\bin\\liblldb.dll'
-                elseif vim.fn.has('linux') then
-                    liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+                else
+                    liblldb_path = liblldb_path .. (this_os == 'Linux' and '.so' or '.dylib')
                 end
 
-                if liblldb_path ~= '' then
-                    adapter =
-                        require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path)
-                end
-            end
+                local capabilities = require('cmp_nvim_lsp').default_capabilities()
+                capabilities =
+                    vim.tbl_deep_extend('keep', capabilities, require('lsp-status').capabilities)
 
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-            require('rust-tools').setup({
-                dap = {
-                    adapter = adapter,
-                },
-                server = {
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    standalone = false,
-                    settings = {
-                        ['rust-analyzer'] = {
-                            checkOnSave = {
-                                command = 'clippy',
-                                extraArgs = { '--no-deps' },
-                            },
-                            diagnostics = {
-                                experimental = { enable = true },
-                                disabled = { 'inactive-code' },
-                            },
+                return {
+                    dap = {
+                        adapter = require('rustaceanvim.config').get_codelldb_adapter(
+                            codelldb_path,
+                            liblldb_path
+                        ),
+                    },
+                    tools = {
+                        hover_actions = {
+                            auto_focus = false,
+                        },
+                        crate_graph = {
+                            backend = nil,
+                            full = false,
+                            output = nil,
+                            enabled_graphviz_backends = {},
+                        },
+                        float_win_config = {
+                            border = 'none',
                         },
                     },
-                    -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
-                    root_dir = function()
-                        return vim.loop.cwd()
-                    end,
-                },
-                tools = {
-                    hover_actions = {
-                        auto_focus = true,
+                    server = {
+                        capabilities = capabilities,
+                        on_attach = on_attach,
+                        standalone = false,
+                        settings = {
+                            ['rust-analyzer'] = {
+                                checkOnSave = {
+                                    command = 'clippy',
+                                    extraArgs = { '--no-deps' },
+                                },
+                                diagnostics = {
+                                    experimental = { enable = true },
+                                    disabled = { 'inactive-code' },
+                                },
+                            },
+                        },
+                        -- https://github.com/neovim/nvim-lspconfig/issues/2518#issuecomment-1564343067
+                        root_dir = function()
+                            return vim.loop.cwd()
+                        end,
                     },
-                    inlay_hints = {
-                        only_current_line = true,
-                    },
-                    crate_graph = {
-                        backend = nil,
-                        full = false,
-                        output = nil,
-                        enabled_graphviz_backends = {},
-                    },
+                }
+            end
+        end,
+    },
+    {
+        'nvim-neotest/neotest',
+        cond = false,
+        event = 'LazyFile',
+        dependencies = {
+            'nvim-neotest/nvim-nio',
+            'nvim-lua/plenary.nvim',
+            'antoinemadec/FixCursorHold.nvim',
+        },
+        config = function()
+            --- @diagnostic disable-next-line: missing-fields
+            require('neotest').setup({
+                adapters = {
+                    require('rustaceanvim.neotest'),
                 },
             })
         end,
+    },
+    {
+        'folke/trouble.nvim',
+        dependencies = {
+            'nvim-tree/nvim-web-devicons',
+        },
+        opts = {
+            auto_preview = false,
+        },
+        keys = {
+            {
+                '<leader>tt',
+                function()
+                    require('trouble').open('workspace_diagnostics')
+                end,
+                mode = 'n',
+                desc = '[t]oggle [t]rouble',
+            },
+            {
+                '<leader>tx',
+                function()
+                    require('trouble').close()
+                end,
+                mode = 'n',
+                desc = 'Close the trouble window',
+            },
+        },
+        cmd = { 'Trouble', 'TroubleClose' },
     },
 }

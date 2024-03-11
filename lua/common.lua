@@ -1,12 +1,22 @@
 local M = {}
 
--- Used to disable Treesitter for large files (too laggy)
-M.large_file_lines_count = 5000
+M.too_many_lines = 5000
+M.too_large_for_treesitter = 140 * 1024
+M.way_too_large = 5 * 1024 * 1024
 
 M.path_separator = '/'
 if vim.fn.has('win32') == 1 then
     M.path_separator = '\\'
 end
+
+M.diagnostic_signs = {
+    text = {
+        [vim.diagnostic.severity.ERROR] = ' ',
+        [vim.diagnostic.severity.WARN] = ' ',
+        [vim.diagnostic.severity.HINT] = '󰌶 ',
+        [vim.diagnostic.severity.INFO] = ' ',
+    },
+}
 
 function M.refresh_statusline()
     local ok, lualine = pcall(require, 'lualine')
@@ -15,22 +25,12 @@ function M.refresh_statusline()
     end
 end
 
---- Barbecue sometimes messes up git diff view
---- @param shown boolean?
+--- @param shown boolean
 function M.toggle_winbar(shown)
     local ok, barbecue_ui = pcall(require, 'barbecue.ui')
     if ok then
         barbecue_ui.toggle(shown)
     end
-end
-
-function M.contains(needle, haystack)
-    for _, v in ipairs(haystack) do
-        if v == needle then
-            return true
-        end
-    end
-    return false
 end
 
 return M
