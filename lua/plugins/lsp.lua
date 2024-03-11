@@ -28,7 +28,7 @@ local function on_attach(client, buffer)
     vim.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, {
         buffer = buffer,
     })
-    vim.keymap.set({ 'i', 'n' }, '<c-k>', vim.lsp.buf.signature_help, {
+    vim.keymap.set({ 'i', 'n' }, '<c-j>', vim.lsp.buf.signature_help, {
         buffer = buffer,
     })
 
@@ -76,6 +76,18 @@ return {
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
             'rafamadriz/friendly-snippets',
+            'hrsh7th/cmp-path',
+            {
+                'windwp/nvim-autopairs',
+                event = 'InsertEnter',
+                config = function()
+                    require('nvim-autopairs').setup()
+
+                    local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+                    local cmp = require('cmp')
+                    cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+                end,
+            },
         },
         event = 'InsertEnter',
         config = function()
@@ -139,7 +151,15 @@ return {
                 sources = {
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
-                    { name = 'buffer' },
+                    {
+                        name = 'buffer',
+                        option = {
+                            get_bufnrs = function()
+                                return vim.api.nvim_list_bufs()
+                            end,
+                        },
+                    },
+                    { name = 'path' },
                 },
                 --- @diagnostic disable-next-line: missing-fields
                 formatting = {
@@ -212,7 +232,7 @@ return {
     },
     {
         'SmiteshP/nvim-navic',
-        event = { 'LspAttach' },
+        event = { 'LazyFile', 'LspAttach' },
     },
     {
         'neovim/nvim-lspconfig',

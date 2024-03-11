@@ -5,7 +5,7 @@ local function disable(_, buffer)
 end
 
 local function disable_indent(language, buffer)
-    return disable(language, buffer) or util.contains(language, { 'rust' })
+    return disable(language, buffer) or util.contains(language, { 'rust', 'c' })
 end
 
 return {

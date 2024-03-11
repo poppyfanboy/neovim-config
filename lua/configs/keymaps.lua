@@ -77,13 +77,13 @@ vim.keymap.set({ 'i' }, '<c-f>', '<c-g>u<Esc>[s1z=`]a<c-g>u')
 -- Scroll by a third of the screen height instead of 50% + keep the cursor in the middle of the
 -- screen
 vim.keymap.set({ 'n' }, '<C-u>', function()
-    local height = math.floor(vim.fn.winheight(0) / 3)
+    local height = math.floor(vim.o.lines / 3)
     vim.cmd(
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-y>M', true, true, true)
     )
 end)
 vim.keymap.set({ 'n' }, '<C-d>', function()
-    local height = math.floor(vim.fn.winheight(0) / 3)
+    local height = math.floor(vim.o.lines / 3)
     vim.cmd(
         'keepjumps norm!' .. vim.api.nvim_replace_termcodes(height .. '<C-e>M', true, true, true)
     )

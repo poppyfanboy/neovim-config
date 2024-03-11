@@ -52,15 +52,18 @@ return {
         },
     },
     {
-        'akinsho/toggleterm.nvim',
+        'poppyfanboy/toggleterm.nvim',
         version = '*',
-        event = { 'VeryLazy' },
         opts = {
             direction = 'float',
             open_mapping = '<f1>',
             shell = function()
                 return vim.o.shell
             end,
+        },
+        cmd = { 'ToggleTerm', 'TermExec' },
+        keys = {
+            { '<f1>', '<cmd>ToggleTerm<cr>', mode = { 'n' } },
         },
     },
 }

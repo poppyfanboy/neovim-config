@@ -36,6 +36,7 @@ vim.o.signcolumn = 'yes'
 vim.o.showmode = false
 vim.o.pumheight = 10
 vim.o.mouse = ''
+vim.o.laststatus = 3
 
 vim.o.sidescrolloff = 3
 

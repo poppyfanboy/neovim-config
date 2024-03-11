@@ -18,8 +18,30 @@ return {
         'rebelot/kanagawa.nvim',
         config = function()
             require('kanagawa').setup({
-                -- this somehow conflicts with markdown highlighting
-                compile = false,
+                compile = true,
+                -- https://github.com/rebelot/kanagawa.nvim/issues/197
+                overrides = function(_)
+                    return {
+                        ['@string.regexp'] = { link = '@string.regex' },
+                        ['@variable.parameter'] = { link = '@parameter' },
+                        ['@exception'] = { link = '@exception' },
+                        ['@string.special.symbol'] = { link = '@symbol' },
+                        ['@markup.heading'] = { link = '@text.title' },
+                        ['@markup.raw'] = { link = '@text.literal' },
+                        ['@markup.quote'] = { link = '@text.quote' },
+                        ['@markup.math'] = { link = '@text.math' },
+                        ['@markup.environment'] = { link = '@text.environment' },
+                        ['@markup.environment.name'] = { link = '@text.environment.name' },
+                        ['@markup.link.url'] = { link = 'Special' },
+                        ['@markup.link.label'] = { link = 'Identifier' },
+                        ['@comment.note'] = { link = '@text.note' },
+                        ['@comment.warning'] = { link = '@text.warning' },
+                        ['@comment.danger'] = { link = '@text.danger' },
+                        ['@diff.plus'] = { link = '@text.diff.add' },
+                        ['@diff.minus'] = { link = '@text.diff.delete' },
+                        ['@comment.todo'] = { link = '@text.todo' },
+                    }
+                end,
             })
 
             vim.cmd.colorscheme('kanagawa')
@@ -67,7 +89,7 @@ return {
         },
         event = 'VeryLazy',
         config = function()
-            local function keymap()
+            local function keymap_section()
                 local prefix = '🌐 '
 
                 if vim.o.iminsert > 0 and vim.b['keymap_name'] ~= nil then
@@ -127,15 +149,6 @@ return {
                     disabled_filetypes = {
                         statusline = {
                             'alpha',
-                            'oil',
-                            'fugitive',
-                            'dapui_scopes',
-                            'dapui_breakpoints',
-                            'dapui_stacks',
-                            'dapui_watches',
-                            'dap-repl',
-                            'dapui_console',
-                            'DiffviewFiles',
                         },
                     },
                 },
@@ -146,10 +159,8 @@ return {
                 },
                 sections = {
                     lualine_a = {},
-                    lualine_c = {
-                        lsp_status_section,
-                    },
-                    lualine_x = { keymap, 'encoding', 'fileformat', 'filetype', 'filesize' },
+                    lualine_c = { lsp_status_section },
+                    lualine_x = { keymap_section, 'encoding', 'fileformat', 'filetype', 'filesize' },
                 },
             })
         end,
@@ -248,10 +259,6 @@ return {
 
             dashboard.section.buttons.opts.spacing = 0
             dashboard.section.buttons.val = {
-                dashboard.button('e', '　New file', [[<cmd>enew<cr>]]),
-                dashboard.button('f', '　Browse files', [[<cmd>Oil<cr>]]),
-                dashboard.button('t', '　Terminal', [[<cmd>ter<cr>]]),
-                dashboard.button('g', '　Git', [[<cmd>Git<cr>]]),
                 dashboard.button(
                     'c',
                     '　Open configs',
@@ -266,6 +273,8 @@ return {
             require('alpha').setup(dashboard.opts)
         end,
     },
+    -- NOTE: Maybe switch to this https://github.com/Bekaboo/dropbar.nvim once Neovim 0.10 gets
+    -- released?
     {
         'utilyre/barbecue.nvim',
         version = '*',
@@ -273,10 +282,11 @@ return {
             'SmiteshP/nvim-navic',
             'nvim-tree/nvim-web-devicons',
         },
-        event = { 'LspAttach' },
+        event = { 'LazyFile', 'LspAttach' },
         config = function()
             require('barbecue').setup({
                 create_autocmd = false,
+                exclude_filetypes = { 'oil' },
             })
 
             vim.api.nvim_create_autocmd({

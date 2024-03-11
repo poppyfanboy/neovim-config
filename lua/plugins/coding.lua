@@ -12,6 +12,10 @@ return {
                     input = { '__().-()__' },
                     output = { left = '__', right = '__' },
                 },
+                ['~'] = {
+                    input = { '~~().-()~~' },
+                    output = { left = '~~', right = '~~' },
+                },
             },
         },
         event = 'LazyFile',
@@ -19,7 +23,14 @@ return {
     {
         'numToStr/Comment.nvim',
         config = true,
-        event = 'LazyFile',
+        keys = {
+            { 'gcc', mode = 'n', desc = 'Comment toggle current line' },
+            { 'gc', mode = { 'n', 'o' }, desc = 'Comment toggle linewise' },
+            { 'gc', mode = 'x', desc = 'Comment toggle linewise (visual)' },
+            { 'gbc', mode = 'n', desc = 'Comment toggle current block' },
+            { 'gb', mode = { 'n', 'o' }, desc = 'Comment toggle blockwise' },
+            { 'gb', mode = 'x', desc = 'Comment toggle blockwise (visual)' },
+        },
     },
     {
         'Wansmer/treesj',
@@ -39,11 +50,6 @@ return {
                 desc = '[a]rguments [j]join (treesj)',
             },
         },
-    },
-    {
-        'windwp/nvim-autopairs',
-        event = 'InsertEnter',
-        config = true,
     },
     {
         'folke/flash.nvim',
